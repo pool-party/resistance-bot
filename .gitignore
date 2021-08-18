@@ -1,0 +1,6 @@
+.gradle
+.idea
+build
+out
+.DS_store
+src/main/resources/test.properties
