@@ -16,8 +16,8 @@ suspend fun Bot.distributeRoles(chatId: Long, stateStorage: StateStorage) {
     val resistance = shuffled.drop(min(size, 2))
 
     // TODO send cards from assets with caption.
-    spies.forEach { sendMessage(it.id, RECEIVE_SPY_ROLE) }
-    resistance.forEach { sendMessage(it.id, RECEIVE_RESISTANCE_ROLE) }
+    spies.forEach { sendMessage(it.id, RECEIVE_SPY_ROLE, "MarkdownV2") }
+    resistance.forEach { sendMessage(it.id, RECEIVE_RESISTANCE_ROLE, "MarkdownV2") }
 
     chooseSquad(chatId, stateStorage)
 }

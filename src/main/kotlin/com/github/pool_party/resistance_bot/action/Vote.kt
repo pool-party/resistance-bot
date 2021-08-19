@@ -19,6 +19,7 @@ private suspend fun Bot.vote(text: String, memberIds: List<Long>, verdictVoteCal
         sendMessage(
             memberId,
             text,
+            "MarkdownV2",
             markup = listOf(
                 makeButton(Configuration.APPROVE_MARK, true),
                 makeButton(Configuration.REJECT_MARK, false),

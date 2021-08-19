@@ -19,6 +19,7 @@ suspend fun Bot.chooseSquad(chatId: Long, stateStorage: StateStorage) {
     sendMessage(
         leader.id,
         LEADER_CHOOSE_MSG,
+        "MarkdownV2",
         markup = state.members
             .asSequence()
             .map { InlineKeyboardButton(it.name, callback_data = SquadChoiceCallbackData(chatId, it.id).encoded) }
