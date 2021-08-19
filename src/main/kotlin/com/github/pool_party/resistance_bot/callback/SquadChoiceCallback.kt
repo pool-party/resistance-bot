@@ -31,7 +31,7 @@ class SquadChoiceCallback(private val stateStorage: StateStorage, private val sq
 
     override val callbackDataKClass = SquadChoiceCallbackData::class
 
-    private val chosen = Configuration.NINJA_MARK
+    private val chosen = Configuration.SPY_MARK
 
     override suspend fun Bot.process(callbackQuery: CallbackQuery, callbackData: CallbackData) {
         val squadChoiceCallbackData = callbackData as? SquadChoiceCallbackData ?: return

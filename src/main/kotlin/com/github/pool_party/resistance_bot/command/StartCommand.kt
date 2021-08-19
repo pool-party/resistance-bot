@@ -11,6 +11,11 @@ import com.github.pool_party.resistance_bot.state.HashStorage
 import com.github.pool_party.resistance_bot.state.Member
 import com.github.pool_party.resistance_bot.state.StateStorage
 
+// TODO I see the start command this way:
+//      - INIT_MSG in private chat with no extra data
+//      - Game registration in private chat with extra data
+//      - Start of the game in the group chats
+//  Update messages for the class after refactor.
 class StartCommand(private val stateStorage: StateStorage, private val hashStorage: HashStorage) :
     AbstractCommand("start", "TODO: long start", "TODO: description start") {
 

@@ -44,11 +44,11 @@ object Configuration {
 
     val REJECTIONS_NUMBER by Configured(intType)
 
-    const val NINJA_MARK = """ 🧑‍🚀"""
+    const val SPY_MARK = """🕵️"""
 
-    const val APPROVE_MARK = """✅"""
+    const val APPROVE_MARK = """👍"""
 
-    const val REJECT_MARK = """✖️"""
+    const val REJECT_MARK = """👎"""
 
     private class Configured<T>(private val parse: (PropertyLocation, String) -> T) {
 

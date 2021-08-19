@@ -23,7 +23,7 @@ class HelpCommand(private val helpMessages: Map<String, String>) :
         sendMessage(
             chatId,
             helpMessages[args[0].removePrefix("/")] ?: "TODO: help error",
-            "Markdown",
+            "MarkdownV2",
         )
     }
 }

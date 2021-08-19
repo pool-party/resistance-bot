@@ -36,5 +36,5 @@ val ON_MORE_PLAYERS =
 
 val ON_GAME_START =
     """
-    *Game is beginning... 🙌*
+    *Game is beginning\.\.\. 🙌*
     """.trimIndent()

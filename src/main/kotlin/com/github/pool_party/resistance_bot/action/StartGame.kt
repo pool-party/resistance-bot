@@ -12,17 +12,18 @@ suspend fun Bot.startGame(chatId: Long, stateStorage: StateStorage) {
     val playersAmount = stateStorage[chatId]?.members?.size
 
     // TODO configuration.
-    if (playersAmount in Configuration.PLAYERS_GAME_MINIMUM..Configuration.PLAYERS_GAME_MAXIMUM) {
-        sendPhoto(chatId, File("/assets/back-plot-a.png"), ON_GAME_START, "Markdown").join()
-        distributeRoles(chatId, stateStorage)
+    if (playersAmount == null || playersAmount !in Configuration.PLAYERS_GAME_MINIMUM..Configuration.PLAYERS_GAME_MAXIMUM) {
+        sendMessage(
+            chatId,
+            if (playersAmount == null || playersAmount < Configuration.PLAYERS_GAME_MINIMUM) ON_LESS_PLAYERS
+            else ON_MORE_PLAYERS,
+            "MarkdownV2"
+        )
+        stateStorage.gameOver(chatId)
         return
     }
 
-    sendMessage(
-        chatId,
-        if (playersAmount == null || playersAmount < Configuration.PLAYERS_GAME_MINIMUM) ON_LESS_PLAYERS
-        else ON_MORE_PLAYERS,
-        "Markdown"
-    )
-    stateStorage.gameOver(chatId)
+    // TODO send picture from assets with caption.
+    sendMessage(chatId, ON_GAME_START, "MarkdownV2").join()
+    distributeRoles(chatId, stateStorage)
 }

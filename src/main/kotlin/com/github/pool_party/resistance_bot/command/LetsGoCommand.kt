@@ -6,6 +6,7 @@ import com.github.pool_party.resistance_bot.action.startGame
 import com.github.pool_party.resistance_bot.chatId
 import com.github.pool_party.resistance_bot.state.StateStorage
 
+// TODO Move this functionality to the start command.
 class LetsGoCommand(private val stateStorage: StateStorage)
     : AbstractCommand("letsgo", "TODO: long letsgo", "TODO: description: letsgo") {
 

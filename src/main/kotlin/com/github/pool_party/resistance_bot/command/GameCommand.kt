@@ -24,7 +24,7 @@ class GameCommand(private val stateStorage: StateStorage, private val hashStorag
         val chatId = message.chatId
 
         if (!stateStorage.newState(chatId)) {
-            sendMessage(chatId, ON_ONGOING_REGISTRATION, "Markdown")
+            sendMessage(chatId, ON_ONGOING_REGISTRATION, "MarkdownV2")
             return
         }
 
@@ -35,7 +35,7 @@ class GameCommand(private val stateStorage: StateStorage, private val hashStorag
             sendMessage(
                 chatId,
                 REGISTRATION_MSG,
-                "Markdown",
+                "MarkdownV2",
                 markup = makeRegistrationMarkup(hashStorage.newHash(gameDescription))
             ).join()
         registrationMessageIdFuture.complete(registrationMessage.message_id)
@@ -51,7 +51,7 @@ class GameCommand(private val stateStorage: StateStorage, private val hashStorag
 
             if (state.started.get()) return
 
-            sendMessage(chatId, onRegistrationTimestamp(timestampToString(timeLeft)), "Markdown")
+            sendMessage(chatId, onRegistrationTimestamp(timestampToString(timeLeft)), "MarkdownV2")
 
             delayTime = Configuration.REGISTRATION_ANNOUNCEMENT_DELAY.toLong()
             timeLeft -= Configuration.REGISTRATION_ANNOUNCEMENT_DELAY
