@@ -3,43 +3,49 @@ package com.github.pool_party.resistance.callback
 import com.elbekD.bot.Bot
 import com.elbekD.bot.types.CallbackQuery
 import com.github.pool_party.resistance.Interaction
-import com.github.pool_party.resistance.decode
-import com.github.pool_party.resistance.encodeInner
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import mu.KotlinLogging
+import kotlin.reflect.KClass
 
-enum class CallbackAction {
-    SQUAD_CHOICE, VOTE
-}
-
+/**
+ * There is a hack with short property serial names to fit into 64 Telegram API callback data bytes.
+ */
 @Serializable
-data class CallbackData(val callbackAction: CallbackAction, val otherData: String) {
+sealed class CallbackData {
+    abstract val gameChatId: Long
 
-    // TODO maybe it is possible to overcome this boilerplate
+    val encoded: String
+        get() = Json.encodeToString(this)
+
     companion object {
-        fun of(string: String) = decode<CallbackData>(string)
-
-        inline fun <reified T> of(callbackAction: CallbackAction, otherData: T) =
-            CallbackData(callbackAction, encodeInner(otherData))
+        fun of(string: String) = Json.decodeFromString<CallbackData>(string)
     }
 }
 
 interface Callback {
 
-    val callbackAction: CallbackAction
+    val callbackDataKClass: KClass<out CallbackData>
 
     suspend fun Bot.process(callbackQuery: CallbackQuery, callbackData: CallbackData)
 }
 
-class CallbackDispatcher(private val callbacks: Map<CallbackAction, Callback>) : Interaction {
+class CallbackDispatcher(callbacks: List<Callback>) : Interaction {
 
     private val logger = KotlinLogging.logger {}
 
-    override fun apply(bot: Bot) = bot.onCallbackQuery {
-        logger.info { "callback ${it.from.username}@${it.message?.chat?.title}: ${it.data}" }
+    private val callbackMap: Map<KClass<out Any>, Callback> = callbacks.associateBy { it.callbackDataKClass }
 
-        val callbackData = it.data?.let { CallbackData.of(it) } ?: return@onCallbackQuery
-        val callback = callbacks[callbackData.callbackAction] ?: return@onCallbackQuery
+    override fun apply(bot: Bot) = bot.onCallbackQuery {
+        val callbackData = it.data?.let { data -> CallbackData.of(data) }
+
+        logger.info { "callback ${it.from.username}@${it.message?.chat?.title}: ${it.data} >=> $callbackData" }
+
+        if (callbackData == null) return@onCallbackQuery
+
+        val callback = callbackMap[callbackData::class] ?: return@onCallbackQuery
 
         with(callback) { bot.process(it, callbackData) }
     }

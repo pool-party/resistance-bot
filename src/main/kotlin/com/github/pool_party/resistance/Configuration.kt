@@ -40,7 +40,13 @@ object Configuration {
 
     val REJECTIONS_NUMBER by Configured(intType)
 
-    private open class Configured<T>(private val parse: (PropertyLocation, String) -> T) {
+    const val NINJA_MARK = """ 🧑‍🚀"""
+
+    const val APPROVE_MARK = """✅"""
+
+    const val REJECT_MARK = """❌"""
+
+    private class Configured<T>(private val parse: (PropertyLocation, String) -> T) {
 
         private var value: T? = null
 

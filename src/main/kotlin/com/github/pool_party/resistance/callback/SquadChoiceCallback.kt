@@ -4,29 +4,37 @@ import com.elbekD.bot.Bot
 import com.elbekD.bot.types.CallbackQuery
 import com.elbekD.bot.types.InlineKeyboardMarkup
 import com.github.pool_party.resistance.Configuration
-import com.github.pool_party.resistance.action.vote
-import com.github.pool_party.resistance.decodeInner
+import com.github.pool_party.resistance.action.squadVote
 import com.github.pool_party.resistance.makeUserLink
 import com.github.pool_party.resistance.name
 import com.github.pool_party.resistance.state.SquadStorage
 import com.github.pool_party.resistance.state.StateStorage
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 @Serializable
-data class SquadChoiceCallbackData(val gameChatId: Long, val personId: Long) {
+@SerialName("c")
+data class SquadChoiceCallbackData(
+    @SerialName("a")
+    override val gameChatId: Long,
+    @SerialName("b")
+    val personId: Long,
+) : CallbackData() {
     companion object {
-        fun of(string: String) = decodeInner<SquadChoiceCallbackData>(string)
+        fun of(string: String) = Json { ignoreUnknownKeys = true }.decodeFromString<SquadChoiceCallbackData>(string)
     }
 }
 
 class SquadChoiceCallback(private val stateStorage: StateStorage, private val squadStorage: SquadStorage) : Callback {
 
-    override val callbackAction = CallbackAction.SQUAD_CHOICE
+    override val callbackDataKClass = SquadChoiceCallbackData::class
 
-    private val chosen = """ 🔫"""
+    private val chosen = Configuration.NINJA_MARK
 
     override suspend fun Bot.process(callbackQuery: CallbackQuery, callbackData: CallbackData) {
-        val squadChoiceCallbackData = SquadChoiceCallbackData.of(callbackData.otherData)
+        val squadChoiceCallbackData = callbackData as? SquadChoiceCallbackData ?: return
 
         val callbackQueryId = callbackQuery.id
         val user = callbackQuery.from
@@ -43,7 +51,7 @@ class SquadChoiceCallback(private val stateStorage: StateStorage, private val sq
 
         val buttons = replyMarkup.inline_keyboard.flatMap { it.asSequence() }
         val clicked = buttons.find {
-            val parsed = SquadChoiceCallbackData.of(CallbackData.of(it.callback_data!!).otherData).personId
+            val parsed = SquadChoiceCallbackData.of(it.callback_data!!).personId
             return@find parsed == squadChoiceCallbackData.personId
         }
 
@@ -75,13 +83,13 @@ class SquadChoiceCallback(private val stateStorage: StateStorage, private val sq
 
             val memberIds = buttons.asSequence()
                 .filter { it.text.endsWith(chosen) }
-                .map { SquadChoiceCallbackData.of(CallbackData.of(it.callback_data!!).otherData).personId }
+                .map { SquadChoiceCallbackData.of(it.callback_data!!).personId }
                 .plus(squadChoiceCallbackData.personId)
                 .toList()
 
             squadStorage[gameChatId] = memberIds
 
-            vote(gameChatId, state.members.map { it.id }, VoteType.SQUAD)
+            squadVote(gameChatId, state.members.map { it.id })
             return
         }
 

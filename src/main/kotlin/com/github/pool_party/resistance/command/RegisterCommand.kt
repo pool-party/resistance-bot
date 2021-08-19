@@ -1,16 +1,15 @@
 package com.github.pool_party.resistance.command
 
 import com.elbekD.bot.Bot
-import com.elbekD.bot.types.InlineKeyboardButton
 import com.elbekD.bot.types.Message
 import com.github.pool_party.resistance.Configuration
 import com.github.pool_party.resistance.action.chooseSquad
 import com.github.pool_party.resistance.action.distributeRoles
 import com.github.pool_party.resistance.chatId
+import com.github.pool_party.resistance.makeRegisterMarkup
 import com.github.pool_party.resistance.state.GameDescription
 import com.github.pool_party.resistance.state.HashStorage
 import com.github.pool_party.resistance.state.StateStorage
-import com.github.pool_party.resistance.toMarkUp
 import kotlinx.coroutines.delay
 import java.util.concurrent.CompletableFuture
 
@@ -26,20 +25,11 @@ class RegisterCommand(private val stateStorage: StateStorage, private val hashSt
         }
 
         val registerMessageIdFuture = CompletableFuture<Int>()
-
         val gameDescription = GameDescription(chatId, registerMessageIdFuture)
 
-        val registrationMessage = sendMessage(
-            chatId,
-            "TODO: registration",
-            markup = listOf(
-                InlineKeyboardButton(
-                    "TODO: register",
-                    url = "https://t.me/${Configuration.USERNAME}?start=${hashStorage.newHash(gameDescription)}"
-                )
-            ).toMarkUp()
-        ).join()
-
+        val registrationMessage =
+            sendMessage(chatId, "TODO: registration", markup = makeRegisterMarkup(hashStorage.newHash(gameDescription)))
+                .join()
         registerMessageIdFuture.complete(registrationMessage.message_id)
 
         delay((Configuration.REGISTRATION_SECONDS - 60) * 1000L)

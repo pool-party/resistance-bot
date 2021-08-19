@@ -2,10 +2,7 @@ package com.github.pool_party.resistance.action
 
 import com.elbekD.bot.Bot
 import com.elbekD.bot.types.InlineKeyboardButton
-import com.github.pool_party.resistance.callback.CallbackAction
-import com.github.pool_party.resistance.callback.CallbackData
 import com.github.pool_party.resistance.callback.SquadChoiceCallbackData
-import com.github.pool_party.resistance.encode
 import com.github.pool_party.resistance.makeUserLink
 import com.github.pool_party.resistance.state.StateStorage
 import com.github.pool_party.resistance.toMarkUp
@@ -41,14 +38,7 @@ suspend fun Bot.chooseSquad(chatId: Long, stateStorage: StateStorage) {
         markup = state.members
             .asSequence()
             .drop(1)
-            .map {
-                InlineKeyboardButton(
-                    it.name,
-                    callback_data = encode(
-                        CallbackData.of(CallbackAction.SQUAD_CHOICE, SquadChoiceCallbackData(chatId, it.id))
-                    )
-                )
-            }
+            .map { InlineKeyboardButton(it.name, callback_data = SquadChoiceCallbackData(chatId, it.id).encoded) }
             .toList()
             .toMarkUp()
     )
