@@ -37,7 +37,6 @@ suspend fun Bot.chooseSquad(chatId: Long, stateStorage: StateStorage) {
         "TODO: choose",
         markup = state.members
             .asSequence()
-            .drop(1)
             .map { InlineKeyboardButton(it.name, callback_data = SquadChoiceCallbackData(chatId, it.id).encoded) }
             .toList()
             .toMarkUp()

@@ -11,6 +11,7 @@ import com.github.pool_party.resistance.callback.SquadChoiceCallback
 import com.github.pool_party.resistance.callback.SquadVoteCallback
 import com.github.pool_party.resistance.command.Command
 import com.github.pool_party.resistance.command.HelpCommand
+import com.github.pool_party.resistance.command.LetsGoCommand
 import com.github.pool_party.resistance.command.RegisterCommand
 import com.github.pool_party.resistance.command.StartCommand
 import com.github.pool_party.resistance.state.HashStorage
@@ -52,6 +53,7 @@ fun Bot.initHandlers() {
         CallbackDispatcher(callbacks),
         StartCommand(stateStorage, hashStorage),
         RegisterCommand(stateStorage, hashStorage),
+        LetsGoCommand(stateStorage),
     )
 
     val commands = interactions.mapNotNull { it as? Command }.toMutableList()

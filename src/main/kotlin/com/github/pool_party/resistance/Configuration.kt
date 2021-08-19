@@ -32,7 +32,9 @@ object Configuration {
 
     val REGISTRATION_SECONDS by Configured(intType)
 
-    val PLAYERS_GAME by Configured(intType)
+    val PLAYERS_GAME_MINIMUM by Configured(intType)
+
+    val PLAYERS_GAME_MAXIMUM by Configured(intType)
 
     val PLAYERS_MISSION by Configured(intType)
 
@@ -44,7 +46,7 @@ object Configuration {
 
     const val APPROVE_MARK = """✅"""
 
-    const val REJECT_MARK = """❌"""
+    const val REJECT_MARK = """✖️"""
 
     private class Configured<T>(private val parse: (PropertyLocation, String) -> T) {
 

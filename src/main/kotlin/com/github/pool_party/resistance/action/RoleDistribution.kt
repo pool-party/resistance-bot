@@ -19,4 +19,6 @@ suspend fun Bot.distributeRoles(chatId: Long, stateStorage: StateStorage) {
 
     spies.forEach { sendMessage(it.id, "TODO: spy") }
     resistance.forEach { sendMessage(it.id, "TODO: resistance") }
+
+    chooseSquad(chatId, stateStorage)
 }

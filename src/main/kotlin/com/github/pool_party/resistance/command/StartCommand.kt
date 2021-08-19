@@ -3,6 +3,7 @@ package com.github.pool_party.resistance.command
 import com.elbekD.bot.Bot
 import com.elbekD.bot.types.Message
 import com.github.pool_party.resistance.Configuration
+import com.github.pool_party.resistance.action.startGame
 import com.github.pool_party.resistance.chatId
 import com.github.pool_party.resistance.makeRegisterMarkup
 import com.github.pool_party.resistance.makeUserLink
@@ -45,12 +46,15 @@ class StartCommand(private val stateStorage: StateStorage, private val hashStora
                     |TODO: same message as before
 
                     |Registered:
-                    |${members.joinToString("\n|") { makeUserLink(it.name, it.id) }}
-                    |\-\-\-
-                    |${members.size} / ${Configuration.PLAYERS_GAME}
+                    |${members.joinToString("\n|") { it.name }}
+                    |---
+                    |${members.size} / ${Configuration.PLAYERS_GAME_MINIMUM}-${Configuration.PLAYERS_GAME_MAXIMUM}
                 """.trimMargin("|"),
-            parseMode = "MarkdownV2",
             markup = makeRegisterMarkup(hash)
         )
+
+        if (members.size >= Configuration.PLAYERS_GAME_MAXIMUM && state.started.compareAndSet(false, true)) {
+            startGame(gameDescription.chatId, stateStorage)
+        }
     }
 }

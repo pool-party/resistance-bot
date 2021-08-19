@@ -53,7 +53,7 @@ abstract class AbstractVoteCallback(
 
         val vote = voteStorage[gameChatId]
 
-        if (getMemberNumber(voteCallbackData).let { it != null && it >= vote.size }) {
+        if (getMemberNumber(voteCallbackData).let { it != null && it <= vote.size }) {
             val result = vote.count { it.second } >= vote.size // TODO >
             voteStorage.clear(gameChatId)
 

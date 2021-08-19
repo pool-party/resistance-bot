@@ -8,7 +8,7 @@ import com.github.pool_party.resistance.callback.MissionVoteCallbackData
 import com.github.pool_party.resistance.callback.SquadVoteCallbackData
 import com.github.pool_party.resistance.toMarkUp
 
-private suspend fun Bot.vote(memberIds: List<Long>, verdictVoteCallBackData: (Boolean) -> CallbackData) {
+private suspend fun Bot.vote(text: String, memberIds: List<Long>, verdictVoteCallBackData: (Boolean) -> CallbackData) {
 
     fun makeButton(text: String, verdict: Boolean) =
         InlineKeyboardButton(text, callback_data = verdictVoteCallBackData(verdict).encoded)
@@ -16,7 +16,7 @@ private suspend fun Bot.vote(memberIds: List<Long>, verdictVoteCallBackData: (Bo
     for (memberId in memberIds) {
         sendMessage(
             memberId,
-            "TODO: vote",
+            text,
             markup = listOf(
                 makeButton(Configuration.APPROVE_MARK,true),
                 makeButton(Configuration.REJECT_MARK, false),
@@ -26,7 +26,7 @@ private suspend fun Bot.vote(memberIds: List<Long>, verdictVoteCallBackData: (Bo
 }
 
 suspend fun Bot.squadVote(chatId: Long, memberIds: List<Long>) =
-    vote(memberIds) { SquadVoteCallbackData(chatId, it) }
+    vote("TODO: squad vote", memberIds) { SquadVoteCallbackData(chatId, it) }
 
 suspend fun Bot.missionVote(chatId: Long, memberIds: List<Long>) =
-    vote(memberIds) { MissionVoteCallbackData(chatId, it, memberIds.size) }
+    vote("TODO: mission vote", memberIds) { MissionVoteCallbackData(chatId, it, memberIds.size) }

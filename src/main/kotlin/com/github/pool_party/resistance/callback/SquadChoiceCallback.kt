@@ -66,9 +66,16 @@ class SquadChoiceCallback(private val stateStorage: StateStorage, private val sq
 
         // TODO
         if (!clickedChosen && warriors.size >= Configuration.PLAYERS_MISSION - 1) {
+
             answerCallbackQuery(callbackQueryId, "TODO: good job")
-            // TODO edit -> chosen team
-            deleteMessage(userId, message.message_id)
+            editMessageText(
+                userId,
+                message.message_id,
+                text = """
+                    |TODO: chosen:
+                    |${(warriors + clicked.text).asSequence().map { it.removeSuffix(chosen) }.joinToString("\n|")}
+                """.trimMargin("|")
+            )
 
             sendMessage(
                 gameChatId,

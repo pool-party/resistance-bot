@@ -3,8 +3,7 @@ package com.github.pool_party.resistance.command
 import com.elbekD.bot.Bot
 import com.elbekD.bot.types.Message
 import com.github.pool_party.resistance.Configuration
-import com.github.pool_party.resistance.action.chooseSquad
-import com.github.pool_party.resistance.action.distributeRoles
+import com.github.pool_party.resistance.action.startGame
 import com.github.pool_party.resistance.chatId
 import com.github.pool_party.resistance.makeRegisterMarkup
 import com.github.pool_party.resistance.state.GameDescription
@@ -32,27 +31,22 @@ class RegisterCommand(private val stateStorage: StateStorage, private val hashSt
                 .join()
         registerMessageIdFuture.complete(registrationMessage.message_id)
 
+        val state = stateStorage[chatId] ?: return
+
         delay((Configuration.REGISTRATION_SECONDS - 60) * 1000L)
 
+        if (state.started.get()) return
         sendMessage(chatId, "TODO: 1m")
 
         delay(30_000L)
 
+        if (state.started.get()) return
         sendMessage(chatId, "TODO: 30s")
 
         delay(30_000L)
 
-        // TODO configuration
-        if (stateStorage[chatId]?.members?.size.let { it == null || it < Configuration.PLAYERS_GAME }) {
-            sendMessage(chatId, "TODO: not enough players")
-            stateStorage.gameOver(chatId)
-            return
+        if (!state.started.compareAndSet(false, true)) {
+            startGame(chatId, stateStorage)
         }
-
-        // TODO add start command (somehow)
-        // TODO wait for N people
-        sendMessage(chatId, "TODO: starting").join()
-        distributeRoles(chatId, stateStorage)
-        chooseSquad(chatId, stateStorage)
     }
 }
