@@ -1,4 +1,4 @@
-package com.github.pool_party.resistance.state
+package com.github.pool_party.resistance_bot.state
 
 import java.util.LinkedList
 import java.util.concurrent.atomic.AtomicBoolean

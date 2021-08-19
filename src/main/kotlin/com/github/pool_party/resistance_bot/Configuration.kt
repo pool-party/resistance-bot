@@ -1,4 +1,4 @@
-package com.github.pool_party.resistance
+package com.github.pool_party.resistance_bot
 
 import com.natpryce.konfig.ConfigurationProperties
 import com.natpryce.konfig.EnvironmentVariables
@@ -31,6 +31,8 @@ object Configuration {
     val TELEGRAM_TOKEN by Configured(stringType)
 
     val REGISTRATION_SECONDS by Configured(intType)
+
+    val REGISTRATION_ANNOUNCEMENT_DELAY by Configured(intType)
 
     val PLAYERS_GAME_MINIMUM by Configured(intType)
 

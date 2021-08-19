@@ -1,8 +1,8 @@
-package com.github.pool_party.resistance.command
+package com.github.pool_party.resistance_bot.command
 
 import com.elbekD.bot.Bot
 import com.elbekD.bot.types.Message
-import com.github.pool_party.resistance.chatId
+import com.github.pool_party.resistance_bot.chatId
 
 class HelpCommand(private val helpMessages: Map<String, String>) :
     AbstractCommand("help", "show this usage guide", "TODO: help") {

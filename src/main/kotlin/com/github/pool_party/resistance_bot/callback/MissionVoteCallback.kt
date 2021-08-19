@@ -1,12 +1,12 @@
-package com.github.pool_party.resistance.callback
+package com.github.pool_party.resistance_bot.callback
 
 import com.elbekD.bot.Bot
-import com.github.pool_party.resistance.Configuration
-import com.github.pool_party.resistance.state.Member
-import com.github.pool_party.resistance.state.SquadStorage
-import com.github.pool_party.resistance.state.State
-import com.github.pool_party.resistance.state.StateStorage
-import com.github.pool_party.resistance.state.VoteStorage
+import com.github.pool_party.resistance_bot.Configuration
+import com.github.pool_party.resistance_bot.state.Member
+import com.github.pool_party.resistance_bot.state.SquadStorage
+import com.github.pool_party.resistance_bot.state.State
+import com.github.pool_party.resistance_bot.state.StateStorage
+import com.github.pool_party.resistance_bot.state.VoteStorage
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

@@ -1,8 +1,8 @@
-package com.github.pool_party.resistance.callback
+package com.github.pool_party.resistance_bot.callback
 
 import com.elbekD.bot.Bot
 import com.elbekD.bot.types.CallbackQuery
-import com.github.pool_party.resistance.Interaction
+import com.github.pool_party.resistance_bot.Interaction
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString

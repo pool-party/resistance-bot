@@ -45,7 +45,7 @@ tasks.withType<Jar> {
     manifest {
         attributes(
             mapOf(
-                "Main-Class" to "com.github.pool_party.resistance.MainKt"
+                "Main-Class" to "com.github.pool_party.resistance_bot.MainKt"
             )
         )
     }
