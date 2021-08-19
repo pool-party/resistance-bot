@@ -32,7 +32,9 @@ class MissionVoteCallback(
     override suspend fun getMemberNumber(voteCallbackData: VoteCallbackData): Int? =
         (voteCallbackData as? MissionVoteCallbackData)?.memberNumber
 
-    override suspend fun Bot.processResults(chatId: Long, result: Boolean, state: State, downVoters: List<Member>) {
+    override suspend fun Bot.processResults(chatId: Long, state: State, votes: List<Pair<Member, Boolean>>) {
+        val result = votes.asSequence().map { it.second }.all { it }
+
         if (result) {
             sendMessage(chatId, "TODO: mission has completed successfully").join()
 

@@ -24,12 +24,7 @@ abstract class AbstractVoteCallback(
 
     abstract suspend fun getMemberNumber(voteCallbackData: VoteCallbackData): Int?
 
-    abstract suspend fun Bot.processResults(
-        chatId: Long,
-        result: Boolean,
-        state: State,
-        downVoters: List<Member>,
-    )
+    abstract suspend fun Bot.processResults(chatId: Long, state: State, votes: List<Pair<Member, Boolean>>)
 
     override suspend fun Bot.process(callbackQuery: CallbackQuery, callbackData: CallbackData) {
         val voteCallbackData = callbackData as? VoteCallbackData ?: return
@@ -51,10 +46,9 @@ abstract class AbstractVoteCallback(
             text = if (voteCallbackData.verdict) Configuration.APPROVE_MARK else Configuration.REJECT_MARK
         )
 
-        val vote = voteStorage[gameChatId]
+        val votes = voteStorage[gameChatId]
 
-        if (getMemberNumber(voteCallbackData).let { it != null && it <= vote.size }) {
-            val result = vote.count { it.second } >= vote.size // TODO >
+        if (getMemberNumber(voteCallbackData).let { it != null && it <= votes.size }) {
             voteStorage.clear(gameChatId)
 
             val state = stateStorage[gameChatId]
@@ -63,12 +57,8 @@ abstract class AbstractVoteCallback(
                 return
             }
 
-            processResults(
-                gameChatId,
-                result,
-                state,
-                vote.asSequence().filter { !it.second }.map { it.first }.toList(),
-            )
+            processResults(gameChatId, state, votes)
+//                vote.asSequence().filter { !it.second }.map { it.first }.toList(),
         }
     }
 

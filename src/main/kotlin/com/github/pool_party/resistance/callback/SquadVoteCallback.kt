@@ -32,7 +32,10 @@ class SquadVoteCallback(
     override suspend fun getMemberNumber(voteCallbackData: VoteCallbackData): Int? =
         stateStorage[voteCallbackData.gameChatId]?.members?.size
 
-    override suspend fun Bot.processResults(chatId: Long, result: Boolean, state: State, downVoters: List<Member>) {
+    override suspend fun Bot.processResults(chatId: Long, state: State, votes: List<Pair<Member, Boolean>>) {
+        val result = votes.count { it.second } >= votes.size
+        val downVoters = votes.asSequence().filter { !it.second }.map { it.first }
+
         if (result) {
             val squad = squadStorage[chatId]
             if (squad == null) {
