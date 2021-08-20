@@ -34,7 +34,13 @@ val ON_MORE_PLAYERS =
     *Too much players to begin a game... 🤯👨‍👩‍👧‍👦*
     """.trimIndent()
 
+val ON_REGISTRATION_STOP =
+    """
+    Registration is cancelled... 🗙
+    """.trimIndent()
+
 val ON_GAME_START =
     """
     *Game is beginning\.\.\. 🙌*
     """.trimIndent()
+

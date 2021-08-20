@@ -34,11 +34,20 @@ val HELP_MSG =
 val HELP_GAME =
     """
     /game - start the registration
+
+    Registration lasts 3 minutes by default, with notifies during the last minute
+    You can begin the game whenever you ready with /start command,
+    Cancel the registration with /stop command
+    Or prolong the registration by 30 seconds with /extend command
+
+    Type /help for more information
     """.trimIndent()
 
 val HELP_START =
     """
     /start - finish the registration and begin a game
+
+    Works only in group chats, shows welcoming message in the private chats
     """.trimIndent()
 
 val HELP_STOP =
@@ -51,7 +60,22 @@ val HELP_EXTEND =
     /extend - add extra 30 seconds for registration
     """.trimIndent()
 
+// TODO PullPartyBot message, might change
+val ON_HELP_ERROR =
+    """
+    The Lord helps those who help themselves 👼
+
+    Expected no arguments or command to explain
+    Follow /help with the unclear command or leave empty for general guide
+    """.trimIndent()
+
 val HELP_RULES =
     """
     /rules - show the list of rules
+    """.trimIndent()
+
+// TODO
+val GAME_RULES =
+    """
+    Rules: smth
     """.trimIndent()

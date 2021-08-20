@@ -7,10 +7,13 @@ import com.github.pool_party.resistance_bot.callback.MissionVoteCallback
 import com.github.pool_party.resistance_bot.callback.SquadChoiceCallback
 import com.github.pool_party.resistance_bot.callback.SquadVoteCallback
 import com.github.pool_party.resistance_bot.command.Command
+import com.github.pool_party.resistance_bot.command.ExtendCommand
+import com.github.pool_party.resistance_bot.command.GameCommand
 import com.github.pool_party.resistance_bot.command.HelpCommand
 import com.github.pool_party.resistance_bot.command.LetsGoCommand
-import com.github.pool_party.resistance_bot.command.GameCommand
+import com.github.pool_party.resistance_bot.command.RulesCommand
 import com.github.pool_party.resistance_bot.command.StartCommand
+import com.github.pool_party.resistance_bot.command.StopCommand
 import com.github.pool_party.resistance_bot.message.REGISTRATION_BUTTON
 import com.github.pool_party.resistance_bot.state.HashStorage
 import com.github.pool_party.resistance_bot.state.InMemoryHashStorage
@@ -58,11 +61,15 @@ fun Bot.initHandlers() {
         SquadVoteCallback(voteStorage, stateStorage, squadStorage),
     )
 
+    // TODO Add new commands.
     val interactions: MutableList<Interaction> = mutableListOf(
         CallbackDispatcher(callbacks),
         StartCommand(stateStorage, hashStorage),
         GameCommand(stateStorage, hashStorage),
+        ExtendCommand(stateStorage),
         LetsGoCommand(stateStorage),
+        StopCommand(stateStorage),
+        RulesCommand()
     )
 
     val commands = interactions.mapNotNull { it as? Command }.toMutableList()
