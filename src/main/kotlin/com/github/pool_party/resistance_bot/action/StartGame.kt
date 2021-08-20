@@ -6,13 +6,13 @@ import com.github.pool_party.resistance_bot.message.ON_GAME_START
 import com.github.pool_party.resistance_bot.message.ON_LESS_PLAYERS
 import com.github.pool_party.resistance_bot.message.ON_MORE_PLAYERS
 import com.github.pool_party.resistance_bot.state.StateStorage
-import java.io.File
 
 suspend fun Bot.startGame(chatId: Long, stateStorage: StateStorage) {
     val playersAmount = stateStorage[chatId]?.members?.size
 
-    // TODO configuration.
-    if (playersAmount == null || playersAmount !in Configuration.PLAYERS_GAME_MINIMUM..Configuration.PLAYERS_GAME_MAXIMUM) {
+    if (playersAmount == null
+        || playersAmount !in Configuration.PLAYERS_GAME_MINIMUM..Configuration.PLAYERS_GAME_MAXIMUM) {
+
         sendMessage(
             chatId,
             if (playersAmount == null || playersAmount < Configuration.PLAYERS_GAME_MINIMUM) ON_LESS_PLAYERS

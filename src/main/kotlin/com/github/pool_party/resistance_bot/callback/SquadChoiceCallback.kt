@@ -5,6 +5,7 @@ import com.elbekD.bot.types.CallbackQuery
 import com.elbekD.bot.types.InlineKeyboardMarkup
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.squadVote
+import com.github.pool_party.resistance_bot.goToBotMarkup
 import com.github.pool_party.resistance_bot.makeUserLink
 import com.github.pool_party.resistance_bot.name
 import com.github.pool_party.resistance_bot.state.SquadStorage
@@ -31,7 +32,7 @@ class SquadChoiceCallback(private val stateStorage: StateStorage, private val sq
 
     override val callbackDataKClass = SquadChoiceCallbackData::class
 
-    private val chosen = Configuration.SPY_MARK
+    private val chosen = " ${Configuration.SPY_MARK}"
 
     override suspend fun Bot.process(callbackQuery: CallbackQuery, callbackData: CallbackData) {
         val squadChoiceCallbackData = callbackData as? SquadChoiceCallbackData ?: return
@@ -85,7 +86,8 @@ class SquadChoiceCallback(private val stateStorage: StateStorage, private val sq
 
                     |${(warriors + clicked.text).asSequence().map { it.removeSuffix(chosen) }.joinToString("\n|")}
                 """.trimMargin("|"),
-                parseMode = "MarkdownV2"
+                "MarkdownV2",
+                markup = goToBotMarkup(),
             )
 
             val memberIds = buttons.asSequence()

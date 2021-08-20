@@ -10,7 +10,6 @@ import com.github.pool_party.resistance_bot.command.Command
 import com.github.pool_party.resistance_bot.command.ExtendCommand
 import com.github.pool_party.resistance_bot.command.GameCommand
 import com.github.pool_party.resistance_bot.command.HelpCommand
-import com.github.pool_party.resistance_bot.command.LetsGoCommand
 import com.github.pool_party.resistance_bot.command.RulesCommand
 import com.github.pool_party.resistance_bot.command.StartCommand
 import com.github.pool_party.resistance_bot.command.StopCommand
@@ -23,6 +22,7 @@ import com.github.pool_party.resistance_bot.state.InMemoryVoteStorage
 import com.github.pool_party.resistance_bot.state.SquadStorage
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.state.VoteStorage
+import kotlin.time.Duration
 
 val Message.chatId
     get() = chat.id
@@ -33,21 +33,25 @@ val User.name
 fun List<InlineKeyboardButton>.toMarkUp() = InlineKeyboardMarkup(listOf(this))
 
 fun makeRegistrationMarkup(hash: String) =
-    listOf(InlineKeyboardButton(REGISTRATION_BUTTON, url = registrationLink(hash))).toMarkUp()
+    listOf(InlineKeyboardButton(REGISTRATION_BUTTON, url = botLink(hash))).toMarkUp()
 
-fun registrationLink(hash: String) = """https://t.me/${Configuration.USERNAME}?start=${hash}"""
+fun goToBotMarkup() = listOf(InlineKeyboardButton("TODO: go to bot", url = botLink())).toMarkUp()
+
+fun botLink(hash: String? = null) =
+    "https://t.me/${Configuration.USERNAME}${if (hash == null) "" else "?start=${hash}"}"
 
 fun makeUserLink(name: String, id: Long) = "[${name}](tg://user?id=${id})"
 
-fun timestampToString(time: Long): String {
-    val minutesDigit = time / 60_000L
-    val secondsDigit = time % 60_000L
+fun durationToString(duration: Duration): String {
+    fun appendTimeType(number: Long, measure: String) =
+        if (number != 0L) if (number != 1L) "$number ${measure}s" else "$number $measure" else ""
 
-    val res = "${appendTimeType(minutesDigit)} ${appendTimeType(secondsDigit)}"
+    val minutes = appendTimeType(duration.inWholeMinutes, "minute")
+    val seconds = appendTimeType(duration.inWholeSeconds % 60, "second")
+
+    val res = if (seconds.isBlank()) minutes else "$minutes $seconds"
     return res.ifBlank { "0" } // TODO handle blank normally.
 }
-
-fun appendTimeType(digit: Long) = if (digit != 0L) if (digit != 1L) "$digit minutes" else "$digit minute" else ""
 
 fun Bot.initHandlers() {
     val stateStorage: StateStorage = InMemoryStateStorage()
@@ -67,9 +71,8 @@ fun Bot.initHandlers() {
         StartCommand(stateStorage, hashStorage),
         GameCommand(stateStorage, hashStorage),
         ExtendCommand(stateStorage),
-        LetsGoCommand(stateStorage),
         StopCommand(stateStorage),
-        RulesCommand()
+        RulesCommand(),
     )
 
     val commands = interactions.mapNotNull { it as? Command }.toMutableList()

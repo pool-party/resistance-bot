@@ -58,7 +58,6 @@ abstract class AbstractVoteCallback(
             }
 
             processResults(gameChatId, state, votes)
-//                vote.asSequence().filter { !it.second }.map { it.first }.toList(),
         }
     }
 

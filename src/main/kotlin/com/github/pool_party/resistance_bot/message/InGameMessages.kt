@@ -35,7 +35,7 @@ fun roundSummary(state: State, leader: Member) =
 // TODO Show the required size if mission team.
 val LEADER_CHOOSE_MSG =
     """
-    *Choose the best team for the upcoming mission! 👊*
+    *Choose the best team for the upcoming mission\! 👊*
     """.trimIndent()
 
 // TODO Show the names of included players (in a beautiful way).

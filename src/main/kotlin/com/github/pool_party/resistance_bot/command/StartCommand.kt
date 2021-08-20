@@ -11,23 +11,23 @@ import com.github.pool_party.resistance_bot.state.HashStorage
 import com.github.pool_party.resistance_bot.state.Member
 import com.github.pool_party.resistance_bot.state.StateStorage
 
-// TODO I see the start command this way:
-//      - INIT_MSG in private chat with no extra data
-//      - Game registration in private chat with extra data
-//      - Start of the game in the group chats
-//  Update messages for the class after refactor.
 class StartCommand(private val stateStorage: StateStorage, private val hashStorage: HashStorage) :
     AbstractCommand("start", "TODO: long start", "TODO: description start") {
 
-    override suspend fun Bot.action(message: Message, args: List<String>) {
-        val hash = args.singleOrNull()
-        val gameDescription = hash?.let { hashStorage[it] }
+    override suspend fun Bot.action(message: Message, args: List<String>) = when {
+        message.chat.type.let { it == "group" || it == "supergroup" } -> startGameCommand(message)
+        args.size == 1 -> register(message, args[0])
+        else -> sendGreetings(message)
+    }
+
+    private suspend fun Bot.register(message: Message, hash: String) {
+        val gameDescription = hashStorage[hash]
         val state = gameDescription?.let { stateStorage[gameDescription.chatId] }
         val senderId = message.chatId
         val senderName = message.from?.name ?: return
 
-        if (hash == null || gameDescription == null || state == null) {
-            sendMessage(senderId, "TODO: hi")
+        if (gameDescription == null || state == null) {
+            sendGreetings(message)
             return
         }
 
@@ -38,13 +38,14 @@ class StartCommand(private val stateStorage: StateStorage, private val hashStora
         }
 
         members += Member(senderId, senderName)
+        val registrationMessageId = gameDescription.registrationMessageId.join() ?: return
 
         // TODO prly back to chat link, if possible
         sendMessage(senderId, "TODO: successfully registered")
 
         editMessageText(
             gameDescription.chatId,
-            gameDescription.registrationMessageId.join(),
+            registrationMessageId,
             text =
                 """
                     |TODO: same message as before
@@ -59,6 +60,24 @@ class StartCommand(private val stateStorage: StateStorage, private val hashStora
 
         if (members.size >= Configuration.PLAYERS_GAME_MAXIMUM && state.started.compareAndSet(false, true)) {
             startGame(gameDescription.chatId, stateStorage)
+        }
+    }
+
+    private fun Bot.sendGreetings(message: Message) {
+        sendMessage(message.chatId, "TODO: hi")
+    }
+
+    private suspend fun Bot.startGameCommand(message: Message) {
+        val chatId = message.chatId
+        val state = stateStorage[chatId]
+
+        if (state == null) {
+            sendMessage(chatId, "TODO: /game first")
+            return
+        }
+
+        if (state.started.compareAndSet(false, true)) {
+            startGame(chatId, stateStorage)
         }
     }
 }

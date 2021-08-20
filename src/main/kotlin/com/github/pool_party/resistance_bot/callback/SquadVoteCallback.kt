@@ -3,6 +3,7 @@ package com.github.pool_party.resistance_bot.callback
 import com.elbekD.bot.Bot
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.missionVote
+import com.github.pool_party.resistance_bot.goToBotMarkup
 import com.github.pool_party.resistance_bot.makeUserLink
 import com.github.pool_party.resistance_bot.state.Member
 import com.github.pool_party.resistance_bot.state.SquadStorage
@@ -43,7 +44,7 @@ class SquadVoteCallback(
                 return
             }
 
-            sendMessage(chatId, "TODO: SQUAD chosen")
+            sendMessage(chatId, "TODO: SQUAD chosen", markup = goToBotMarkup())
             missionVote(chatId, squad)
             return
         }
