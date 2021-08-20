@@ -5,17 +5,11 @@ import com.github.pool_party.resistance_bot.state.Member
 import com.github.pool_party.resistance_bot.state.State
 
 // TODO add short description according to rules.
-val RECEIVE_SPY_ROLE =
-    """
-    *Your role - the spy 🕵️*
-    """.trimIndent()
+const val RECEIVE_SPY_ROLE = """*Your role - the spy 🕵️*"""
 
 // TODO add short description according to rules.
 //  Rename the role, change emoji.
-val RECEIVE_RESISTANCE_ROLE =
-    """
-    *Your role - the resistant 🦸*
-    """.trimIndent()
+const val RECEIVE_RESISTANCE_ROLE = """*Your role - the resistant 🦸*"""
 
 // TODO Store the order of results in the state for chronological roadmap.
 //  Show all leaders in particular order.
@@ -33,19 +27,12 @@ fun roundSummary(state: State, leader: Member) =
     """.trimIndent()
 
 // TODO Show the required size if mission team.
-val LEADER_CHOOSE_MSG =
-    """
-    *Choose the best team for the upcoming mission\! 👊*
-    """.trimIndent()
+const val LEADER_CHOOSE_MSG = """*Choose the best team for the upcoming mission\! 👊*"""
+
+const val VOTING_SUGGEST = """Head to the bot chat for the voting"""
 
 // TODO Show the names of included players (in a beautiful way).
-val TEAM_VOTE =
-    """
-    Do you trust this team a mission? 🤨
-    """.trimIndent()
+const val TEAM_VOTE = """Do you trust this team a mission? 🤨"""
 
 // TODO Consider using different button marks for this vote.
-val MISSION_VOTE =
-    """
-    Make your choice 🤔
-    """.trimIndent()
+const val MISSION_VOTE = """Make your choice 🤔"""

@@ -14,6 +14,7 @@ import com.github.pool_party.resistance_bot.command.RulesCommand
 import com.github.pool_party.resistance_bot.command.StartCommand
 import com.github.pool_party.resistance_bot.command.StopCommand
 import com.github.pool_party.resistance_bot.message.REGISTRATION_BUTTON
+import com.github.pool_party.resistance_bot.message.VOTING_SUGGEST
 import com.github.pool_party.resistance_bot.state.HashStorage
 import com.github.pool_party.resistance_bot.state.InMemoryHashStorage
 import com.github.pool_party.resistance_bot.state.InMemorySquadStorage
@@ -35,7 +36,7 @@ fun List<InlineKeyboardButton>.toMarkUp() = InlineKeyboardMarkup(listOf(this))
 fun makeRegistrationMarkup(hash: String) =
     listOf(InlineKeyboardButton(REGISTRATION_BUTTON, url = botLink(hash))).toMarkUp()
 
-fun goToBotMarkup() = listOf(InlineKeyboardButton("TODO: go to bot", url = botLink())).toMarkUp()
+fun goToBotMarkup() = listOf(InlineKeyboardButton(VOTING_SUGGEST, url = botLink())).toMarkUp()
 
 fun botLink(hash: String? = null) =
     "https://t.me/${Configuration.USERNAME}${if (hash == null) "" else "?start=${hash}"}"

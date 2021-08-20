@@ -30,7 +30,7 @@ class GameCommand(private val stateStorage: StateStorage, private val hashStorag
         }
 
         val registrationMessageIdFuture = CompletableFuture<Int>()
-        val gameDescription = GameDescription(chatId, registrationMessageIdFuture)
+        val gameDescription = GameDescription(chatId, message.chat.title, registrationMessageIdFuture)
 
         val registrationMessage: Message
 

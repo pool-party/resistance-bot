@@ -4,7 +4,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.random.Random
 
-data class GameDescription(val chatId: Long, val registrationMessageId: CompletableFuture<Int>)
+data class GameDescription(val chatId: Long, val chatName: String?, val registrationMessageId: CompletableFuture<Int>)
 
 interface HashStorage {
 
