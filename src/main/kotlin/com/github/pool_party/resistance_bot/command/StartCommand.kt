@@ -25,11 +25,9 @@ class StartCommand(private val stateStorage: StateStorage, private val hashStora
         val gameDescription = hashStorage[hash]
         val state = gameDescription?.let { stateStorage[gameDescription.chatId] }
         val senderId = message.chatId
-        // We may allow to play without the name or alert that you can't (?)
         val senderName = message.from?.name ?: return
 
         if (gameDescription == null || state == null) {
-            // Isn't it the case before the registration? We can suggest to initialize it with /game (?)
             sendGreetings(message)
             return
         }
@@ -43,16 +41,14 @@ class StartCommand(private val stateStorage: StateStorage, private val hashStora
         members += Member(senderId, senderName)
         val registrationMessageId = gameDescription.registrationMessageId.join() ?: return
 
-        // TODO prly back to chat link, if possible (As far as I got, not possible)
         sendMessage(senderId, onRegistrationSuccess(gameDescription.chatName), "MarkdownV2")
 
-        // TODO doesn't work with `parseMode`, check later
         editMessageText(
             gameDescription.chatId,
             registrationMessageId,
             text = onNewPlayerUpdate(members),
-//            parseMode = "MarkdownV2",
-            markup = makeRegistrationMarkup(hash)
+            parseMode = "MarkdownV2",
+            markup = makeRegistrationMarkup(hash),
         )
 
         if (members.size >= Configuration.PLAYERS_GAME_MAXIMUM && state.started.compareAndSet(false, true)) {

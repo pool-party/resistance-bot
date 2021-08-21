@@ -39,16 +39,15 @@ const val ON_LESS_PLAYERS = """*Not enough players to begin a game\.\.\. 💁�
 
 const val ON_MORE_PLAYERS = """*Too much players to begin a game\.\.\. 🤯👨‍👩‍👧‍👦*"""
 
-// TODO Fix members indent.
 fun onNewPlayerUpdate(members: List<Member>) =
     """
-    *Registration is open ✨*
+    |*Registration is open ✨*
 
-    ${members.size} player${if (members.size == 1) "" else "s"} already joined:
-        - ${members.joinToString("\n  - ") { "`${it.name}`" }}
+    |${members.size} player${if (members.size == 1) "" else "s"} already joined:
+    |  \- ${members.joinToString("\n|  \\- ") { "`${it.name}`" }}
 
-    _${Configuration.PLAYERS_GAME_MINIMUM} to ${Configuration.PLAYERS_GAME_MAXIMUM} players is necessary_
-    """.trimIndent()
+    |_${Configuration.PLAYERS_GAME_MINIMUM} to ${Configuration.PLAYERS_GAME_MAXIMUM} players is necessary_
+    """.trimMargin()
 
 const val ON_REGISTRATION_STOP = """Registration is cancelled... 🗙"""
 
