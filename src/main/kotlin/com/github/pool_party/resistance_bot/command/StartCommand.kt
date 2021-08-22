@@ -4,9 +4,15 @@ import com.elbekD.bot.Bot
 import com.elbekD.bot.types.Message
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.startGame
+import com.github.pool_party.resistance_bot.addBotMarkup
 import com.github.pool_party.resistance_bot.chatId
 import com.github.pool_party.resistance_bot.makeRegistrationMarkup
-import com.github.pool_party.resistance_bot.message.*
+import com.github.pool_party.resistance_bot.message.HELP_START
+import com.github.pool_party.resistance_bot.message.INIT_MSG
+import com.github.pool_party.resistance_bot.message.ON_NO_REGISTRATION_START
+import com.github.pool_party.resistance_bot.message.ON_REGISTRATION_REPEAT
+import com.github.pool_party.resistance_bot.message.onNewPlayerUpdate
+import com.github.pool_party.resistance_bot.message.onRegistrationSuccess
 import com.github.pool_party.resistance_bot.name
 import com.github.pool_party.resistance_bot.state.HashStorage
 import com.github.pool_party.resistance_bot.state.Member
@@ -57,7 +63,7 @@ class StartCommand(private val stateStorage: StateStorage, private val hashStora
     }
 
     private fun Bot.sendGreetings(message: Message) {
-        sendMessage(message.chatId, INIT_MSG)
+        sendMessage(message.chatId, INIT_MSG, markup = addBotMarkup())
     }
 
     private suspend fun Bot.startGameCommand(message: Message) {

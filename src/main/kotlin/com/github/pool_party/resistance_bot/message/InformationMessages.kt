@@ -7,29 +7,28 @@ val INIT_MSG =
     Hey! I'm an online version of board game "Resistance"!
 
     You may start by going through the list of /rules
-    Or jump right in with /game command
+    Or add bot to your group chat and jump right in with /game command
 
     Bot requires admin rights to organize the game in your group chat
 
     Type /help for more information
     """.trimIndent()
 
-// TODO Make /rules, /extend, /stop commands (and others)
+const val INIT_MARKUP = """Add a game to your group chat ✉️"""
+
 val HELP_MSG =
     """
     Available commands:
 
-        /game  - start the registration
+        /game - start the registration
         /start - finish the registration and begin a game
-        /stop  - cancel the current registration
+        /stop - cancel the current registration
 
         /extend - add extra 30 seconds for registration
 
         /help  - show this usage guide
         /rules - show the list of rules
     """.trimIndent()
-
-// TODO extend help messages.
 
 val HELP_GAME =
     """

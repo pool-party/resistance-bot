@@ -2,12 +2,17 @@ package com.github.pool_party.resistance_bot.state
 
 import java.util.concurrent.ConcurrentHashMap
 
+/**
+ * Pair of user id and their verdict.
+ */
+typealias Vote = Pair<Member, Boolean>
+
 interface VoteStorage {
 
     /**
-     * For a chat id returns a list of pairs of user id and their verdict.
+     * For a chat id returns a list of [Vote].
      */
-    operator fun get(chatId: Long): List<Pair<Member, Boolean>>
+    operator fun get(chatId: Long): List<Vote>
 
     fun set(chatId: Long, member: Member, verdict: Boolean)
 
@@ -16,7 +21,7 @@ interface VoteStorage {
 
 class InMemoryVoteStorage : VoteStorage {
 
-    private val votes = ConcurrentHashMap<Long, MutableMap<Long, Pair<Member, Boolean>>>()
+    private val votes = ConcurrentHashMap<Long, MutableMap<Long, Vote>>()
 
     override fun get(chatId: Long) = votes[chatId]?.values?.toList().orEmpty()
 

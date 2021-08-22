@@ -9,6 +9,7 @@ import com.github.pool_party.resistance_bot.state.Member
 import com.github.pool_party.resistance_bot.state.SquadStorage
 import com.github.pool_party.resistance_bot.state.State
 import com.github.pool_party.resistance_bot.state.StateStorage
+import com.github.pool_party.resistance_bot.state.Vote
 import com.github.pool_party.resistance_bot.state.VoteStorage
 
 interface VoteCallbackData {
@@ -24,7 +25,7 @@ abstract class AbstractVoteCallback(
 
     abstract suspend fun getMemberNumber(voteCallbackData: VoteCallbackData): Int?
 
-    abstract suspend fun Bot.processResults(chatId: Long, state: State, votes: List<Pair<Member, Boolean>>)
+    abstract suspend fun Bot.processResults(chatId: Long, state: State, votes: List<Vote>)
 
     override suspend fun Bot.process(callbackQuery: CallbackQuery, callbackData: CallbackData) {
         val voteCallbackData = callbackData as? VoteCallbackData ?: return
@@ -40,6 +41,7 @@ abstract class AbstractVoteCallback(
             return
         }
 
+        //TODO Make unique symbols for different votes.
         editMessageText(
             user.id,
             messageId,
@@ -51,11 +53,7 @@ abstract class AbstractVoteCallback(
         if (getMemberNumber(voteCallbackData).let { it != null && it <= votes.size }) {
             voteStorage.clear(gameChatId)
 
-            val state = stateStorage[gameChatId]
-            if (state == null) {
-                sendMessage(gameChatId, "TODO: game over kekw")
-                return
-            }
+            val state = stateStorage[gameChatId] ?: return
 
             processResults(gameChatId, state, votes)
         }

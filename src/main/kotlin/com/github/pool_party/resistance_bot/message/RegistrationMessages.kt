@@ -20,6 +20,11 @@ val ON_NO_REGISTRATION_START =
     Then use /start command to begin a game
     """.trimIndent()
 
+val ON_PRIVATE_CHAT_REGISTRATION =
+    """
+    Unable to start a game in a private chat 🙅‍♀️
+    """.trimIndent()
+
 val ON_ONGOING_REGISTRATION =
     """
     *Registration is already in progress 🚧*

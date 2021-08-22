@@ -2,10 +2,10 @@ package com.github.pool_party.resistance_bot.callback
 
 import com.elbekD.bot.Bot
 import com.github.pool_party.resistance_bot.Configuration
-import com.github.pool_party.resistance_bot.state.Member
 import com.github.pool_party.resistance_bot.state.SquadStorage
 import com.github.pool_party.resistance_bot.state.State
 import com.github.pool_party.resistance_bot.state.StateStorage
+import com.github.pool_party.resistance_bot.state.Vote
 import com.github.pool_party.resistance_bot.state.VoteStorage
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -32,7 +32,7 @@ class MissionVoteCallback(
     override suspend fun getMemberNumber(voteCallbackData: VoteCallbackData): Int? =
         (voteCallbackData as? MissionVoteCallbackData)?.memberNumber
 
-    override suspend fun Bot.processResults(chatId: Long, state: State, votes: List<Pair<Member, Boolean>>) {
+    override suspend fun Bot.processResults(chatId: Long, state: State, votes: List<Vote>) {
         val result = votes.asSequence().map { it.second }.all { it }
 
         if (result) {

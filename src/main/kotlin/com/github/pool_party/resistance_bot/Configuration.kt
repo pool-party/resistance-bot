@@ -1,13 +1,6 @@
 package com.github.pool_party.resistance_bot
 
-import com.natpryce.konfig.ConfigurationProperties
-import com.natpryce.konfig.EnvironmentVariables
-import com.natpryce.konfig.Key
-import com.natpryce.konfig.PropertyLocation
-import com.natpryce.konfig.booleanType
-import com.natpryce.konfig.intType
-import com.natpryce.konfig.overriding
-import com.natpryce.konfig.stringType
+import com.natpryce.konfig.*
 import kotlin.reflect.KProperty
 import kotlin.time.Duration
 
@@ -45,7 +38,7 @@ object Configuration {
 
     val REJECTIONS_NUMBER by ConfiguredInt()
 
-    const val SPY_MARK = """🕵️"""
+    const val SPY_MARK = """🦹‍♂️"""
 
     const val APPROVE_MARK = """👍"""
 

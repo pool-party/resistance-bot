@@ -4,11 +4,13 @@ import com.elbekD.bot.Bot
 import com.elbekD.bot.types.Message
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.startGame
+import com.github.pool_party.resistance_bot.addBotMarkup
 import com.github.pool_party.resistance_bot.chatId
 import com.github.pool_party.resistance_bot.durationToString
 import com.github.pool_party.resistance_bot.makeRegistrationMarkup
 import com.github.pool_party.resistance_bot.message.HELP_GAME
 import com.github.pool_party.resistance_bot.message.ON_ONGOING_REGISTRATION
+import com.github.pool_party.resistance_bot.message.ON_PRIVATE_CHAT_REGISTRATION
 import com.github.pool_party.resistance_bot.message.REGISTRATION_MSG
 import com.github.pool_party.resistance_bot.message.onRegistrationTimestamp
 import com.github.pool_party.resistance_bot.state.GameDescription
@@ -23,6 +25,11 @@ class GameCommand(private val stateStorage: StateStorage, private val hashStorag
 
     override suspend fun Bot.action(message: Message, args: List<String>) {
         val chatId = message.chatId
+
+        if (message.chat.type != "group" && message.chat.type != "supergroup") {
+            sendMessage(chatId, ON_PRIVATE_CHAT_REGISTRATION, "MarkdownV2", markup = addBotMarkup())
+            return
+        }
 
         if (!stateStorage.newState(chatId)) {
             sendMessage(chatId, ON_ONGOING_REGISTRATION, "MarkdownV2")
@@ -53,10 +60,11 @@ class GameCommand(private val stateStorage: StateStorage, private val hashStorag
 
         val registrationDuration = Configuration.REGISTRATION_TIME
         var delayTime =
-            if (registrationDuration > minutes(1)) registrationDuration - minutes(1) else registrationDuration
+            if (registrationDuration > minutes(1)) registrationDuration - minutes(1)
+            else registrationDuration
         var timeLeft = registrationDuration
 
-        while (timeLeft.isPositive()) {
+        while (true) {
             delay(delayTime)
             timeLeft -= delayTime
 

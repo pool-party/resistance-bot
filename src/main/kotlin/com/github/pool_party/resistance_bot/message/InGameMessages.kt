@@ -5,7 +5,7 @@ import com.github.pool_party.resistance_bot.state.Member
 import com.github.pool_party.resistance_bot.state.State
 
 // TODO add short description according to rules.
-const val RECEIVE_SPY_ROLE = """*Your role - the spy 🕵️*"""
+const val RECEIVE_SPY_ROLE = """*Your role - the spy 🦹‍♂️*"""
 
 // TODO add short description according to rules.
 //  Rename the role, change emoji.

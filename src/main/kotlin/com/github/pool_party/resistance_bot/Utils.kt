@@ -1,28 +1,19 @@
 package com.github.pool_party.resistance_bot
 
 import com.elbekD.bot.Bot
-import com.elbekD.bot.types.*
+import com.elbekD.bot.types.InlineKeyboardButton
+import com.elbekD.bot.types.InlineKeyboardMarkup
+import com.elbekD.bot.types.Message
+import com.elbekD.bot.types.User
 import com.github.pool_party.resistance_bot.callback.CallbackDispatcher
 import com.github.pool_party.resistance_bot.callback.MissionVoteCallback
 import com.github.pool_party.resistance_bot.callback.SquadChoiceCallback
 import com.github.pool_party.resistance_bot.callback.SquadVoteCallback
-import com.github.pool_party.resistance_bot.command.Command
-import com.github.pool_party.resistance_bot.command.ExtendCommand
-import com.github.pool_party.resistance_bot.command.GameCommand
-import com.github.pool_party.resistance_bot.command.HelpCommand
-import com.github.pool_party.resistance_bot.command.RulesCommand
-import com.github.pool_party.resistance_bot.command.StartCommand
-import com.github.pool_party.resistance_bot.command.StopCommand
+import com.github.pool_party.resistance_bot.command.*
+import com.github.pool_party.resistance_bot.message.INIT_MARKUP
 import com.github.pool_party.resistance_bot.message.REGISTRATION_BUTTON
 import com.github.pool_party.resistance_bot.message.VOTING_SUGGEST
-import com.github.pool_party.resistance_bot.state.HashStorage
-import com.github.pool_party.resistance_bot.state.InMemoryHashStorage
-import com.github.pool_party.resistance_bot.state.InMemorySquadStorage
-import com.github.pool_party.resistance_bot.state.InMemoryStateStorage
-import com.github.pool_party.resistance_bot.state.InMemoryVoteStorage
-import com.github.pool_party.resistance_bot.state.SquadStorage
-import com.github.pool_party.resistance_bot.state.StateStorage
-import com.github.pool_party.resistance_bot.state.VoteStorage
+import com.github.pool_party.resistance_bot.state.*
 import kotlin.time.Duration
 
 val Message.chatId
@@ -35,6 +26,9 @@ fun List<InlineKeyboardButton>.toMarkUp() = InlineKeyboardMarkup(listOf(this))
 
 fun makeRegistrationMarkup(hash: String) =
     listOf(InlineKeyboardButton(REGISTRATION_BUTTON, url = botLink(hash))).toMarkUp()
+
+fun addBotMarkup() = listOf(InlineKeyboardButton(INIT_MARKUP,
+    url = "https://t.me/${Configuration.USERNAME}?startgroup=true")).toMarkUp()
 
 fun goToBotMarkup() = listOf(InlineKeyboardButton(VOTING_SUGGEST, url = botLink())).toMarkUp()
 
@@ -66,13 +60,12 @@ fun Bot.initHandlers() {
         SquadVoteCallback(voteStorage, stateStorage, squadStorage),
     )
 
-    // TODO Add new commands.
     val interactions: MutableList<Interaction> = mutableListOf(
         CallbackDispatcher(callbacks),
-        StartCommand(stateStorage, hashStorage),
         GameCommand(stateStorage, hashStorage),
-        ExtendCommand(stateStorage),
+        StartCommand(stateStorage, hashStorage),
         StopCommand(stateStorage),
+        ExtendCommand(stateStorage),
         RulesCommand(),
     )
 
