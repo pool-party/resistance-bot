@@ -1,6 +1,13 @@
 package com.github.pool_party.resistance_bot
 
-import com.natpryce.konfig.*
+import com.natpryce.konfig.ConfigurationProperties
+import com.natpryce.konfig.EnvironmentVariables
+import com.natpryce.konfig.Key
+import com.natpryce.konfig.PropertyLocation
+import com.natpryce.konfig.booleanType
+import com.natpryce.konfig.intType
+import com.natpryce.konfig.overriding
+import com.natpryce.konfig.stringType
 import kotlin.reflect.KProperty
 import kotlin.time.Duration
 
