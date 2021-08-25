@@ -1,10 +1,12 @@
-package com.github.pool_party.resistance_bot
+package com.github.pool_party.resistance_bot.utils
 
 import com.elbekD.bot.Bot
 import com.elbekD.bot.types.InlineKeyboardButton
 import com.elbekD.bot.types.InlineKeyboardMarkup
 import com.elbekD.bot.types.Message
 import com.elbekD.bot.types.User
+import com.github.pool_party.resistance_bot.Configuration
+import com.github.pool_party.resistance_bot.Interaction
 import com.github.pool_party.resistance_bot.callback.CallbackDispatcher
 import com.github.pool_party.resistance_bot.callback.MissionVoteCallback
 import com.github.pool_party.resistance_bot.callback.SquadChoiceCallback

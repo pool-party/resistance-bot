@@ -5,11 +5,11 @@ import com.elbekD.bot.types.CallbackQuery
 import com.elbekD.bot.types.InlineKeyboardMarkup
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.squadVote
-import com.github.pool_party.resistance_bot.goToBotMarkup
-import com.github.pool_party.resistance_bot.makeUserLink
-import com.github.pool_party.resistance_bot.name
 import com.github.pool_party.resistance_bot.state.SquadStorage
 import com.github.pool_party.resistance_bot.state.StateStorage
+import com.github.pool_party.resistance_bot.utils.goToBotMarkup
+import com.github.pool_party.resistance_bot.utils.makeUserLink
+import com.github.pool_party.resistance_bot.utils.name
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString

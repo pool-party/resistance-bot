@@ -4,19 +4,19 @@ import com.elbekD.bot.Bot
 import com.elbekD.bot.types.Message
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.startGame
-import com.github.pool_party.resistance_bot.addBotMarkup
-import com.github.pool_party.resistance_bot.chatId
-import com.github.pool_party.resistance_bot.makeRegistrationMarkup
 import com.github.pool_party.resistance_bot.message.HELP_START
 import com.github.pool_party.resistance_bot.message.INIT_MSG
 import com.github.pool_party.resistance_bot.message.ON_NO_REGISTRATION_START
 import com.github.pool_party.resistance_bot.message.ON_REGISTRATION_REPEAT
 import com.github.pool_party.resistance_bot.message.onNewPlayerUpdate
 import com.github.pool_party.resistance_bot.message.onRegistrationSuccess
-import com.github.pool_party.resistance_bot.name
 import com.github.pool_party.resistance_bot.state.HashStorage
 import com.github.pool_party.resistance_bot.state.Member
 import com.github.pool_party.resistance_bot.state.StateStorage
+import com.github.pool_party.resistance_bot.utils.addBotMarkup
+import com.github.pool_party.resistance_bot.utils.chatId
+import com.github.pool_party.resistance_bot.utils.makeRegistrationMarkup
+import com.github.pool_party.resistance_bot.utils.name
 
 class StartCommand(private val stateStorage: StateStorage, private val hashStorage: HashStorage) :
     AbstractCommand("start", "finish the registration and begin a game", HELP_START) {

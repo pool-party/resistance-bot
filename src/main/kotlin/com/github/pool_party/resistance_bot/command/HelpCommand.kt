@@ -2,9 +2,9 @@ package com.github.pool_party.resistance_bot.command
 
 import com.elbekD.bot.Bot
 import com.elbekD.bot.types.Message
-import com.github.pool_party.resistance_bot.chatId
 import com.github.pool_party.resistance_bot.message.HELP_MSG
 import com.github.pool_party.resistance_bot.message.ON_HELP_ERROR
+import com.github.pool_party.resistance_bot.utils.chatId
 
 class HelpCommand(private val helpMessages: Map<String, String>) :
     AbstractCommand("help", "show this usage guide", HELP_MSG) {

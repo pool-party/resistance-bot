@@ -1,8 +1,8 @@
 package com.github.pool_party.resistance_bot.message
 
-import com.github.pool_party.resistance_bot.makeUserLink
 import com.github.pool_party.resistance_bot.state.Member
 import com.github.pool_party.resistance_bot.state.State
+import com.github.pool_party.resistance_bot.utils.makeUserLink
 
 // TODO add short description according to rules.
 const val RECEIVE_SPY_ROLE = """*Your role - the spy 🦹‍♂️*"""

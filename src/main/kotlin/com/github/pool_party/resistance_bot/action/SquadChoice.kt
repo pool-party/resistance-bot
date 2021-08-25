@@ -6,7 +6,7 @@ import com.github.pool_party.resistance_bot.callback.SquadChoiceCallbackData
 import com.github.pool_party.resistance_bot.message.LEADER_CHOOSE_MSG
 import com.github.pool_party.resistance_bot.message.roundSummary
 import com.github.pool_party.resistance_bot.state.StateStorage
-import com.github.pool_party.resistance_bot.toMarkUp
+import com.github.pool_party.resistance_bot.utils.toMarkUp
 
 suspend fun Bot.chooseSquad(chatId: Long, stateStorage: StateStorage) {
 

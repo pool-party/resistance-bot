@@ -4,10 +4,6 @@ import com.elbekD.bot.Bot
 import com.elbekD.bot.types.Message
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.startGame
-import com.github.pool_party.resistance_bot.addBotMarkup
-import com.github.pool_party.resistance_bot.chatId
-import com.github.pool_party.resistance_bot.durationToString
-import com.github.pool_party.resistance_bot.makeRegistrationMarkup
 import com.github.pool_party.resistance_bot.message.HELP_GAME
 import com.github.pool_party.resistance_bot.message.ON_ONGOING_REGISTRATION
 import com.github.pool_party.resistance_bot.message.ON_PRIVATE_CHAT_REGISTRATION
@@ -16,6 +12,10 @@ import com.github.pool_party.resistance_bot.message.onRegistrationTimestamp
 import com.github.pool_party.resistance_bot.state.GameDescription
 import com.github.pool_party.resistance_bot.state.HashStorage
 import com.github.pool_party.resistance_bot.state.StateStorage
+import com.github.pool_party.resistance_bot.utils.addBotMarkup
+import com.github.pool_party.resistance_bot.utils.chatId
+import com.github.pool_party.resistance_bot.utils.durationToString
+import com.github.pool_party.resistance_bot.utils.makeRegistrationMarkup
 import kotlinx.coroutines.delay
 import java.util.concurrent.CompletableFuture
 import kotlin.time.Duration.Companion.minutes

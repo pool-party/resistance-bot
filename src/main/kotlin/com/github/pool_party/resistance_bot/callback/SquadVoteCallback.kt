@@ -3,13 +3,13 @@ package com.github.pool_party.resistance_bot.callback
 import com.elbekD.bot.Bot
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.missionVote
-import com.github.pool_party.resistance_bot.goToBotMarkup
-import com.github.pool_party.resistance_bot.makeUserLink
 import com.github.pool_party.resistance_bot.state.SquadStorage
 import com.github.pool_party.resistance_bot.state.State
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.state.Vote
 import com.github.pool_party.resistance_bot.state.VoteStorage
+import com.github.pool_party.resistance_bot.utils.goToBotMarkup
+import com.github.pool_party.resistance_bot.utils.makeUserLink
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
