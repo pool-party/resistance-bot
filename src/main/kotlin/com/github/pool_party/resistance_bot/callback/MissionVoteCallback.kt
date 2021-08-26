@@ -2,30 +2,21 @@ package com.github.pool_party.resistance_bot.callback
 
 import com.elbekD.bot.Bot
 import com.github.pool_party.resistance_bot.Configuration
-import com.github.pool_party.resistance_bot.state.SquadStorage
 import com.github.pool_party.resistance_bot.state.State
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.state.Vote
-import com.github.pool_party.resistance_bot.state.VoteStorage
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName("m")
+@SerialName("mission")
 data class MissionVoteCallbackData(
-    @SerialName("a")
     override val gameChatId: Long,
-    @SerialName("b")
     override val verdict: Boolean,
-    @SerialName("c")
     val memberNumber: Int,
 ) : CallbackData(), VoteCallbackData
 
-class MissionVoteCallback(
-    voteStorage: VoteStorage,
-    stateStorage: StateStorage,
-    squadStorage: SquadStorage,
-) : AbstractVoteCallback(voteStorage, stateStorage, squadStorage) {
+class MissionVoteCallback(stateStorage: StateStorage) : AbstractVoteCallback(stateStorage) {
 
     override val callbackDataKClass = MissionVoteCallbackData::class
 

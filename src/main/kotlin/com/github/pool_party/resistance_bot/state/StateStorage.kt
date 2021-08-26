@@ -1,5 +1,6 @@
 package com.github.pool_party.resistance_bot.state
 
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 
 interface StateStorage {
@@ -9,7 +10,7 @@ interface StateStorage {
     /**
      * Returns whether new game has been initialized or there is already one in progress.
      */
-    fun newState(chatId: Long): Boolean
+    fun newState(chatId: Long, registrationMessageId: CompletableFuture<Int>, chatName: String? = null): Boolean
 
     fun gameOver(chatId: Long)
 }
@@ -20,7 +21,8 @@ class InMemoryStateStorage : StateStorage {
 
     override fun get(chatId: Long) = states[chatId]
 
-    override fun newState(chatId: Long): Boolean = states.putIfAbsent(chatId, State()) == null
+    override fun newState(chatId: Long, registrationMessageId: CompletableFuture<Int>, chatName: String?): Boolean =
+        states.putIfAbsent(chatId, State(chatName, registrationMessageId)) == null
 
     override fun gameOver(chatId: Long) {
         states.remove(chatId)

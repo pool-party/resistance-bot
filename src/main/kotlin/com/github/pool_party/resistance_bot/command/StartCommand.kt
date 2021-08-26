@@ -10,7 +10,7 @@ import com.github.pool_party.resistance_bot.message.ON_NO_REGISTRATION_START
 import com.github.pool_party.resistance_bot.message.ON_REGISTRATION_REPEAT
 import com.github.pool_party.resistance_bot.message.onNewPlayerUpdate
 import com.github.pool_party.resistance_bot.message.onRegistrationSuccess
-import com.github.pool_party.resistance_bot.state.HashStorage
+import com.github.pool_party.resistance_bot.state.Coder
 import com.github.pool_party.resistance_bot.state.Member
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.utils.addBotMarkup
@@ -18,7 +18,7 @@ import com.github.pool_party.resistance_bot.utils.chatId
 import com.github.pool_party.resistance_bot.utils.makeRegistrationMarkup
 import com.github.pool_party.resistance_bot.utils.name
 
-class StartCommand(private val stateStorage: StateStorage, private val hashStorage: HashStorage) :
+class StartCommand(private val stateStorage: StateStorage, private val longCoder: Coder<Long>) :
     AbstractCommand("start", "finish the registration and begin a game", HELP_START) {
 
     override suspend fun Bot.action(message: Message, args: List<String>) = when {
@@ -27,39 +27,50 @@ class StartCommand(private val stateStorage: StateStorage, private val hashStora
         else -> sendGreetings(message)
     }
 
-    private suspend fun Bot.register(message: Message, hash: String) {
-        val gameDescription = hashStorage[hash]
-        val state = gameDescription?.let { stateStorage[gameDescription.chatId] }
+    private suspend fun Bot.register(message: Message, code: String) {
+        val chatId = longCoder.decode(code)
+        val state = stateStorage[chatId]
         val senderId = message.chatId
         val senderName = message.from?.name ?: return
 
-        if (gameDescription == null || state == null) {
+        if (state == null) {
             sendGreetings(message)
             return
         }
 
-        val members = state.members
-        if (members.asSequence().map { it.id }.contains(senderId)) {
-            sendMessage(senderId, ON_REGISTRATION_REPEAT, "MarkdownV2")
-            return
+        var startingGame = false
+
+        state.withStarted { started ->
+            if (started) {
+                sendMessage(senderId, "TODO: the game has already started")
+                return@withStarted true
+            }
+
+            val members = state.members
+
+            if (members.asSequence().map { it.id }.contains(senderId)) {
+                sendMessage(senderId, ON_REGISTRATION_REPEAT, "MarkdownV2")
+                return@withStarted false
+            }
+
+            members += Member(senderId, senderName)
+            val registrationMessageId = state.registrationMessageId
+
+            sendMessage(senderId, onRegistrationSuccess(state.chatName), "MarkdownV2")
+
+            editMessageText(
+                chatId,
+                registrationMessageId,
+                text = onNewPlayerUpdate(members),
+                parseMode = "MarkdownV2",
+                markup = makeRegistrationMarkup(code),
+            ).join()
+
+            startingGame = members.size >= Configuration.PLAYERS_GAME_MAXIMUM
+            startingGame
         }
 
-        members += Member(senderId, senderName)
-        val registrationMessageId = gameDescription.registrationMessageId.join() ?: return
-
-        sendMessage(senderId, onRegistrationSuccess(gameDescription.chatName), "MarkdownV2")
-
-        editMessageText(
-            gameDescription.chatId,
-            registrationMessageId,
-            text = onNewPlayerUpdate(members),
-            parseMode = "MarkdownV2",
-            markup = makeRegistrationMarkup(hash),
-        )
-
-        if (members.size >= Configuration.PLAYERS_GAME_MAXIMUM && state.started.compareAndSet(false, true)) {
-            startGame(gameDescription.chatId, stateStorage)
-        }
+        if (startingGame) startGame(chatId, stateStorage)
     }
 
     private fun Bot.sendGreetings(message: Message) {
@@ -75,8 +86,6 @@ class StartCommand(private val stateStorage: StateStorage, private val hashStora
             return
         }
 
-        if (state.started.compareAndSet(false, true)) {
-            startGame(chatId, stateStorage)
-        }
+        state.tryStartAndDo { startGame(chatId, stateStorage) }
     }
 }

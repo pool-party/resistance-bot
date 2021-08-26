@@ -16,19 +16,12 @@ val INIT_MSG =
 
 const val INIT_MARKUP = """Add a game to your group chat ✉️"""
 
-val HELP_MSG =
+fun helpMessage(helpMessages: Map<String, String>) =
     """
-    Available commands:
-
-        /game - start the registration
-        /start - finish the registration and begin a game
-        /stop - cancel the current registration
-
-        /extend - add extra 30 seconds for registration
-
-        /help  - show this usage guide
-        /rules - show the list of rules
-    """.trimIndent()
+    |Available commands:
+    |
+    |${helpMessages.asSequence().joinToString("\n|") { "${it.key} - ${it.value}" }}
+    """.trimMargin()
 
 val HELP_GAME =
     """

@@ -9,18 +9,18 @@ import com.github.pool_party.resistance_bot.message.ON_ONGOING_REGISTRATION
 import com.github.pool_party.resistance_bot.message.ON_PRIVATE_CHAT_REGISTRATION
 import com.github.pool_party.resistance_bot.message.REGISTRATION_MSG
 import com.github.pool_party.resistance_bot.message.onRegistrationTimestamp
-import com.github.pool_party.resistance_bot.state.GameDescription
-import com.github.pool_party.resistance_bot.state.HashStorage
+import com.github.pool_party.resistance_bot.state.Coder
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.utils.addBotMarkup
 import com.github.pool_party.resistance_bot.utils.chatId
+import com.github.pool_party.resistance_bot.utils.dec
 import com.github.pool_party.resistance_bot.utils.durationToString
 import com.github.pool_party.resistance_bot.utils.makeRegistrationMarkup
 import kotlinx.coroutines.delay
 import java.util.concurrent.CompletableFuture
 import kotlin.time.Duration.Companion.minutes
 
-class GameCommand(private val stateStorage: StateStorage, private val hashStorage: HashStorage) :
+class GameCommand(private val stateStorage: StateStorage, private val longCoder: Coder<Long>) :
     AbstractCommand("game", "start the registration", HELP_GAME) {
 
     override suspend fun Bot.action(message: Message, args: List<String>) {
@@ -31,13 +31,12 @@ class GameCommand(private val stateStorage: StateStorage, private val hashStorag
             return
         }
 
-        if (!stateStorage.newState(chatId)) {
+        val registrationMessageIdFuture = CompletableFuture<Int>()
+
+        if (!stateStorage.newState(chatId, registrationMessageIdFuture, message.chat.title)) {
             sendMessage(chatId, ON_ONGOING_REGISTRATION, "MarkdownV2")
             return
         }
-
-        val registrationMessageIdFuture = CompletableFuture<Int>()
-        val gameDescription = GameDescription(chatId, message.chat.title, registrationMessageIdFuture)
 
         val registrationMessage: Message
 
@@ -46,39 +45,48 @@ class GameCommand(private val stateStorage: StateStorage, private val hashStorag
                 chatId,
                 REGISTRATION_MSG,
                 "MarkdownV2",
-                markup = makeRegistrationMarkup(hashStorage.newHash(gameDescription))
+                markup = makeRegistrationMarkup(longCoder.encode(chatId))
             ).join()
         } catch (e: Throwable) {
-            registrationMessageIdFuture.complete(null)
+            registrationMessageIdFuture.completeExceptionally(e)
             throw e
         }
 
-        registrationMessageIdFuture.complete(registrationMessage.message_id)
+        val registrationMessageId = registrationMessage.message_id
+        registrationMessageIdFuture.complete(registrationMessageId)
+        pinChatMessage(chatId, registrationMessageId, disableNotification = true)
 
         // TODO check behaviour.
         val state = stateStorage[chatId] ?: return
 
+        val extendTime = Configuration.REGISTRATION_EXTEND
         val registrationDuration = Configuration.REGISTRATION_TIME
         var delayTime =
-            if (registrationDuration > minutes(1)) registrationDuration - minutes(1)
+            if (registrationDuration > minutes(1)) registrationDuration - extendTime
             else registrationDuration
         var timeLeft = registrationDuration
 
+        // TODO make adequate
         while (true) {
             delay(delayTime)
-            timeLeft -= delayTime
 
-            if (state.started.get()) return
+            if (state.withStarted { it }) return
 
-            if (!timeLeft.isPositive()) break
+            val extends = state.registrationExtendCounter
+
+            if (extends.get() > 0) {
+                state.registrationExtendCounter--
+            } else {
+                timeLeft -= delayTime
+
+                if (!timeLeft.isPositive()) break
+            }
 
             sendMessage(chatId, onRegistrationTimestamp(durationToString(timeLeft)), "MarkdownV2")
 
-            delayTime = Configuration.REGISTRATION_ANNOUNCEMENT_DELAY
+            delayTime = extendTime
         }
 
-        if (state.started.compareAndSet(false, true)) {
-            startGame(chatId, stateStorage)
-        }
+        state.tryStartAndDo { startGame(chatId, stateStorage) }
     }
 }

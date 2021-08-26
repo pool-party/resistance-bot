@@ -5,11 +5,9 @@ import com.elbekD.bot.types.CallbackQuery
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.chooseSquad
 import com.github.pool_party.resistance_bot.state.Member
-import com.github.pool_party.resistance_bot.state.SquadStorage
 import com.github.pool_party.resistance_bot.state.State
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.state.Vote
-import com.github.pool_party.resistance_bot.state.VoteStorage
 import com.github.pool_party.resistance_bot.utils.name
 
 interface VoteCallbackData {
@@ -17,11 +15,7 @@ interface VoteCallbackData {
     val verdict: Boolean
 }
 
-abstract class AbstractVoteCallback(
-    private val voteStorage: VoteStorage,
-    protected val stateStorage: StateStorage,
-    protected val squadStorage: SquadStorage,
-) : Callback {
+abstract class AbstractVoteCallback(protected val stateStorage: StateStorage) : Callback {
 
     abstract suspend fun getMemberNumber(voteCallbackData: VoteCallbackData): Int?
 
@@ -29,17 +23,15 @@ abstract class AbstractVoteCallback(
 
     override suspend fun Bot.process(callbackQuery: CallbackQuery, callbackData: CallbackData) {
         val voteCallbackData = callbackData as? VoteCallbackData ?: return
-        val callbackQueryId = callbackQuery.id
         val gameChatId = voteCallbackData.gameChatId
+        val state = stateStorage[gameChatId] ?: return
         val user = callbackQuery.from
-        voteStorage.set(gameChatId, Member(user.id.toLong(), user.name), voteCallbackData.verdict)
+        val newVote = state.vote(Member(user.id.toLong(), user.name), voteCallbackData.verdict)
         val messageId = callbackQuery.message?.message_id
 
-        answerCallbackQuery(callbackQueryId)
+        answerCallbackQuery(callbackQuery.id)
 
-        if (messageId == null) {
-            return
-        }
+        if (messageId == null) return
 
         //TODO Make unique symbols for different votes.
         editMessageText(
@@ -48,20 +40,17 @@ abstract class AbstractVoteCallback(
             text = if (voteCallbackData.verdict) Configuration.APPROVE_MARK else Configuration.REJECT_MARK
         )
 
-        val votes = voteStorage[gameChatId]
+        val voteList = state.votes.values.toList()
 
-        if (getMemberNumber(voteCallbackData).let { it != null && it <= votes.size }) {
-            voteStorage.clear(gameChatId)
-
-            val state = stateStorage[gameChatId] ?: return
-
-            processResults(gameChatId, state, votes)
+        if (newVote && getMemberNumber(voteCallbackData).let { it != null && it <= voteList.size }) {
+            // This block of code is executed only by the first succeeded thread.
+            state.votes.clear()
+            processResults(gameChatId, state, voteList)
         }
     }
 
     protected suspend fun Bot.nextSquadChoice(chatId: Long, state: State) {
-        val members = state.members
-        members += members.removeFirst()
+        state.nextLeader()
         chooseSquad(chatId, stateStorage)
     }
 }

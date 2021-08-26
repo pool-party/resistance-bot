@@ -8,16 +8,18 @@ import com.github.pool_party.resistance_bot.message.ON_MORE_PLAYERS
 import com.github.pool_party.resistance_bot.state.StateStorage
 
 suspend fun Bot.startGame(chatId: Long, stateStorage: StateStorage) {
-    val playersAmount = stateStorage[chatId]?.members?.size
+    val state = stateStorage[chatId] ?: return
 
-    if (playersAmount == null
-        || playersAmount !in Configuration.PLAYERS_GAME_MINIMUM..Configuration.PLAYERS_GAME_MAXIMUM) {
+    editMessageText(chatId, state.registrationMessageId, text = "TODO: registration is closed")
+    unpinChatMessage(chatId, state.registrationMessageId)
 
+    val playersAmount = state.members.size
+
+    if (playersAmount !in Configuration.PLAYERS_GAME_MINIMUM..Configuration.PLAYERS_GAME_MAXIMUM) {
         sendMessage(
             chatId,
-            if (playersAmount == null || playersAmount < Configuration.PLAYERS_GAME_MINIMUM) ON_LESS_PLAYERS
-            else ON_MORE_PLAYERS,
-            "MarkdownV2"
+            if (playersAmount < Configuration.PLAYERS_GAME_MINIMUM) ON_LESS_PLAYERS else ON_MORE_PLAYERS,
+            "MarkdownV2",
         )
         stateStorage.gameOver(chatId)
         return

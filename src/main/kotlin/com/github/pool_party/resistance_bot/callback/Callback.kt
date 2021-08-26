@@ -4,9 +4,9 @@ import com.elbekD.bot.Bot
 import com.elbekD.bot.types.CallbackQuery
 import com.github.pool_party.resistance_bot.Interaction
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import kotlinx.serialization.decodeFromByteArray
+import kotlinx.serialization.encodeToByteArray
+import kotlinx.serialization.protobuf.ProtoBuf
 import mu.KotlinLogging
 import kotlin.reflect.KClass
 
@@ -18,10 +18,11 @@ sealed class CallbackData {
     abstract val gameChatId: Long
 
     val encoded: String
-        get() = Json.encodeToString(this)
+        get() = ProtoBuf.encodeToByteArray(this).joinToString("") { it.toInt().toChar().toString() }
 
     companion object {
-        fun of(string: String) = Json.decodeFromString<CallbackData>(string)
+        fun of(string: String) =
+            ProtoBuf.decodeFromByteArray<CallbackData>(string.map { it.code.toByte() }.toByteArray())
     }
 }
 

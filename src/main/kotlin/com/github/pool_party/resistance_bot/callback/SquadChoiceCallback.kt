@@ -2,33 +2,25 @@ package com.github.pool_party.resistance_bot.callback
 
 import com.elbekD.bot.Bot
 import com.elbekD.bot.types.CallbackQuery
-import com.elbekD.bot.types.InlineKeyboardMarkup
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.squadVote
-import com.github.pool_party.resistance_bot.state.SquadStorage
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.utils.goToBotMarkup
 import com.github.pool_party.resistance_bot.utils.makeUserLink
 import com.github.pool_party.resistance_bot.utils.name
+import com.github.pool_party.resistance_bot.utils.toMarkUp
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 
 @Serializable
-@SerialName("c")
-data class SquadChoiceCallbackData(
-    @SerialName("a")
-    override val gameChatId: Long,
-    @SerialName("b")
-    val personId: Long,
-) : CallbackData() {
+@SerialName("choice")
+data class SquadChoiceCallbackData(override val gameChatId: Long, val personId: Long) : CallbackData() {
     companion object {
-        fun of(string: String) = Json { ignoreUnknownKeys = true }.decodeFromString<SquadChoiceCallbackData>(string)
+        fun of(string: String) = CallbackData.of(string) as SquadChoiceCallbackData
     }
 }
 
-class SquadChoiceCallback(private val stateStorage: StateStorage, private val squadStorage: SquadStorage) : Callback {
+class SquadChoiceCallback(private val stateStorage: StateStorage) : Callback {
 
     override val callbackDataKClass = SquadChoiceCallbackData::class
 
@@ -65,8 +57,9 @@ class SquadChoiceCallback(private val stateStorage: StateStorage, private val sq
 
         val warriors = buttons.asSequence().map { it.text }.filter { it.endsWith(chosen) }.toList()
 
-        // TODO
-        if (!clickedChosen && warriors.size >= Configuration.PLAYERS_MISSION - 1) {
+        val currentMissionAgentNumber = state.board.missionAgentNumber[state.spyPoints + state.resistancePoints + 1]
+
+        if (!clickedChosen && warriors.size >= currentMissionAgentNumber - 1) {
 
             answerCallbackQuery(callbackQueryId, "TODO: good job")
             editMessageText(
@@ -96,7 +89,7 @@ class SquadChoiceCallback(private val stateStorage: StateStorage, private val sq
                 .plus(squadChoiceCallbackData.personId)
                 .toList()
 
-            squadStorage[gameChatId] = memberIds
+            state.squad = memberIds
 
             squadVote(gameChatId, state.members.map { it.id })
             return
@@ -105,21 +98,14 @@ class SquadChoiceCallback(private val stateStorage: StateStorage, private val sq
         editMessageReplyMarkup(
             userId,
             message.message_id,
-            markup =
-                InlineKeyboardMarkup(
-                    listOf(
-                        buttons.map {
-                            if (it != clicked) {
-                                return@map it
-                            }
+            markup = buttons.map {
+                if (it != clicked) return@map it
 
-                            val newText =
-                                if (clickedChosen) clicked.text.removeSuffix(chosen)
-                                else "${clicked.text}$chosen"
-                            return@map it.copy(text = newText)
-                        }
-                    )
-                )
+                val newText =
+                    if (clickedChosen) clicked.text.removeSuffix(chosen)
+                    else "${clicked.text}$chosen"
+                return@map it.copy(text = newText)
+            }.toMarkUp()
         )
 
         answerCallbackQuery(callbackQueryId)

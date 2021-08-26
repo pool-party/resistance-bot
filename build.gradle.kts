@@ -20,7 +20,7 @@ val kotlinVersion = "1.5.21"
 dependencies {
     implementation("org.jetbrains.kotlin", "kotlin-stdlib-jdk8", kotlinVersion)
     implementation("org.jetbrains.kotlin", "kotlin-reflect", kotlinVersion)
-    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.2.2")
+    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-protobuf", "1.2.2")
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.5.1")
 
 

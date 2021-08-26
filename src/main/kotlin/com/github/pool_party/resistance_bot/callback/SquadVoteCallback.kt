@@ -3,30 +3,20 @@ package com.github.pool_party.resistance_bot.callback
 import com.elbekD.bot.Bot
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.missionVote
-import com.github.pool_party.resistance_bot.state.SquadStorage
 import com.github.pool_party.resistance_bot.state.State
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.state.Vote
-import com.github.pool_party.resistance_bot.state.VoteStorage
 import com.github.pool_party.resistance_bot.utils.goToBotMarkup
 import com.github.pool_party.resistance_bot.utils.makeUserLink
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName("s")
-data class SquadVoteCallbackData(
-    @SerialName("a")
-    override val gameChatId: Long,
-    @SerialName("b")
-    override val verdict: Boolean,
-) : CallbackData(), VoteCallbackData
+@SerialName("squad")
+data class SquadVoteCallbackData(override val gameChatId: Long, override val verdict: Boolean) :
+    CallbackData(), VoteCallbackData
 
-class SquadVoteCallback(
-    voteStorage: VoteStorage,
-    stateStorage: StateStorage,
-    squadStorage: SquadStorage,
-) : AbstractVoteCallback(voteStorage, stateStorage, squadStorage) {
+class SquadVoteCallback(stateStorage: StateStorage) : AbstractVoteCallback(stateStorage) {
 
     override val callbackDataKClass = SquadVoteCallbackData::class
 
@@ -38,7 +28,7 @@ class SquadVoteCallback(
         val downVoters = votes.asSequence().filter { !it.second }.map { it.first }
 
         if (result) {
-            val squad = squadStorage[chatId]
+            val squad = state.squad
             if (squad == null) {
                 sendMessage(chatId, "TODO: gg 500")
                 return

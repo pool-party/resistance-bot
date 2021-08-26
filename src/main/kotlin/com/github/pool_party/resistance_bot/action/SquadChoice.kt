@@ -11,7 +11,9 @@ import com.github.pool_party.resistance_bot.utils.toMarkUp
 suspend fun Bot.chooseSquad(chatId: Long, stateStorage: StateStorage) {
 
     val state = stateStorage[chatId] ?: return
-    val leader = state.members.firstOrNull() ?: return
+    val leader = state.leader
+
+    state.squad = null
 
     // TODO Consider using pictures from assets as the roadmaps.
     sendMessage(chatId, roundSummary(state, leader), "MarkdownV2")
@@ -21,9 +23,7 @@ suspend fun Bot.chooseSquad(chatId: Long, stateStorage: StateStorage) {
         LEADER_CHOOSE_MSG,
         "MarkdownV2",
         markup = state.members
-            .asSequence()
             .map { InlineKeyboardButton(it.name, callback_data = SquadChoiceCallbackData(chatId, it.id).encoded) }
-            .toList()
             .toMarkUp()
     ).join()
 }
