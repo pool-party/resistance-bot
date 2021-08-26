@@ -2,8 +2,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "1.5.21"
-    kotlin("plugin.serialization") version "1.5.21"
+    id("org.jetbrains.kotlin.jvm") version "1.5.30"
+    kotlin("plugin.serialization") version "1.5.30"
 }
 
 group = "org.pool-party"
@@ -15,7 +15,7 @@ repositories {
 }
 
 val jupyterVersion = "5.6.0"
-val kotlinVersion = "1.5.21"
+val kotlinVersion = "1.5.30"
 
 dependencies {
     implementation("org.jetbrains.kotlin", "kotlin-stdlib-jdk8", kotlinVersion)

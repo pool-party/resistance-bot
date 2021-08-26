@@ -2,6 +2,7 @@ package com.github.pool_party.resistance_bot.message
 
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.state.Member
+import kotlin.time.Duration
 
 val REGISTRATION_MSG =
     """
@@ -32,7 +33,7 @@ val ON_ONGOING_REGISTRATION =
     Type /start to begin a game or /stop to cancel the current registration
     """.trimIndent()
 
-fun onRegistrationTimestamp(time: String) =
+fun onRegistrationTimestamp(time: Duration) =
     """
     *$time left until the start of the game 📣*
 

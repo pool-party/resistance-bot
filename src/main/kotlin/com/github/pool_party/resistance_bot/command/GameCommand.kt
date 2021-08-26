@@ -14,7 +14,6 @@ import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.utils.addBotMarkup
 import com.github.pool_party.resistance_bot.utils.chatId
 import com.github.pool_party.resistance_bot.utils.dec
-import com.github.pool_party.resistance_bot.utils.durationToString
 import com.github.pool_party.resistance_bot.utils.makeRegistrationMarkup
 import kotlinx.coroutines.delay
 import java.util.concurrent.CompletableFuture
@@ -82,7 +81,7 @@ class GameCommand(private val stateStorage: StateStorage, private val longCoder:
                 if (!timeLeft.isPositive()) break
             }
 
-            sendMessage(chatId, onRegistrationTimestamp(durationToString(timeLeft)), "MarkdownV2")
+            sendMessage(chatId, onRegistrationTimestamp(timeLeft), "MarkdownV2")
 
             delayTime = extendTime
         }
