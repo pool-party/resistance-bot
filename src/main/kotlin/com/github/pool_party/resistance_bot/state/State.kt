@@ -45,6 +45,9 @@ class State(val chatName: String? = null, registrationMessageIdFuture: Completab
 
     val votes: MutableMap<Long, Vote> = ConcurrentHashMap()
 
+    val currentMissionAgentNumber
+        get() = board.missionAgentNumber[spyPoints + resistancePoints]
+
     private val startedMutex = Mutex()
 
     private var started = false

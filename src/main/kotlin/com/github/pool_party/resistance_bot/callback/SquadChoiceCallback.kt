@@ -57,9 +57,7 @@ class SquadChoiceCallback(private val stateStorage: StateStorage) : Callback {
 
         val warriors = buttons.asSequence().map { it.text }.filter { it.endsWith(chosen) }.toList()
 
-        val currentMissionAgentNumber = state.board.missionAgentNumber[state.spyPoints + state.resistancePoints + 1]
-
-        if (!clickedChosen && warriors.size >= currentMissionAgentNumber - 1) {
+        if (!clickedChosen && warriors.size >= state.currentMissionAgentNumber - 1) {
 
             answerCallbackQuery(callbackQueryId, "TODO: good job")
             editMessageText(
