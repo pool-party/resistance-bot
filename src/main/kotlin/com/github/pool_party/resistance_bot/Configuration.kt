@@ -32,13 +32,6 @@ object Configuration {
     const val WIN_NUMBER = 3
 
     val BOARDS = sequenceOf(
-        // TODO TEST
-        Board(1, 0, listOf(1, 1, 1, 1, 1)),
-        Board(1, 1, listOf(1, 2, 1, 2, 1)),
-        Board(2, 1, listOf(1, 2, 1, 2, 1)),
-        Board(2, 1, listOf(1, 2, 1, 2, 1)),
-        Board(3, 1, listOf(1, 2, 1, 2, 1)),
-
         Board(3, 2, listOf(2, 3, 2, 3, 3)),
         Board(3, 3, listOf(2, 3, 4, 3, 4)),
         // TODO boards for 7-10
