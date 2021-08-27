@@ -3,8 +3,8 @@ package com.github.pool_party.resistance_bot
 import com.github.pool_party.resistance_bot.state.Board
 import com.github.pool_party.resistance_bot.utils.ConfigurationUtils.boolean
 import com.github.pool_party.resistance_bot.utils.ConfigurationUtils.int
-import com.github.pool_party.resistance_bot.utils.ConfigurationUtils.string
 import com.github.pool_party.resistance_bot.utils.ConfigurationUtils.seconds
+import com.github.pool_party.resistance_bot.utils.ConfigurationUtils.string
 
 object Configuration {
 
