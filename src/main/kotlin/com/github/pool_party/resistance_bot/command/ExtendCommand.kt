@@ -7,6 +7,7 @@ import com.github.pool_party.resistance_bot.message.HELP_EXTEND
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.utils.chatId
 import com.github.pool_party.resistance_bot.utils.inc
+import com.github.pool_party.resistance_bot.utils.sendMessageLogging
 
 class ExtendCommand(private val stateStorage: StateStorage) :
     AbstractCommand(
@@ -17,21 +18,21 @@ class ExtendCommand(private val stateStorage: StateStorage) :
 
     override suspend fun Bot.action(message: Message, args: List<String>) {
         val chatId = message.chatId
-        val state = stateStorage[chatId]
+        val state = stateStorage.getRegistrationState(chatId)
 
         if (state == null) {
-            sendMessage(chatId, "TODO: no registration in progress")
+            sendMessageLogging(chatId, "TODO: no registration in progress")
             return
         }
 
         state.withStarted {
             if (it) {
-                sendMessage(chatId, "TODO: already started")
+                sendMessageLogging(chatId, "TODO: already started")
                 return@withStarted true
             }
 
             state.registrationExtendCounter++
-            sendMessage(chatId, "TODO: successfully extended, TODO: time left")
+            sendMessageLogging(chatId, "TODO: successfully extended, TODO: time left")
             false
         }
     }

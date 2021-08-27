@@ -8,6 +8,7 @@ import com.github.pool_party.resistance_bot.callback.MissionVoteCallbackData
 import com.github.pool_party.resistance_bot.callback.SquadVoteCallbackData
 import com.github.pool_party.resistance_bot.message.MISSION_VOTE
 import com.github.pool_party.resistance_bot.message.TEAM_VOTE
+import com.github.pool_party.resistance_bot.utils.sendMessageLogging
 import com.github.pool_party.resistance_bot.utils.toMarkUp
 
 private suspend fun Bot.vote(text: String, memberIds: List<Long>, verdictVoteCallBackData: (Boolean) -> CallbackData) {
@@ -16,11 +17,10 @@ private suspend fun Bot.vote(text: String, memberIds: List<Long>, verdictVoteCal
         InlineKeyboardButton(text, callback_data = verdictVoteCallBackData(verdict).encoded)
 
     for (memberId in memberIds) {
-        sendMessage(
+        sendMessageLogging(
             memberId,
             text,
-            "MarkdownV2",
-            markup = listOf(
+            listOf(
                 makeButton(Configuration.APPROVE_MARK, true),
                 makeButton(Configuration.REJECT_MARK, false),
             ).toMarkUp()

@@ -10,6 +10,7 @@ import com.github.pool_party.resistance_bot.command.Command
 import com.github.pool_party.resistance_bot.command.ExtendCommand
 import com.github.pool_party.resistance_bot.command.GameCommand
 import com.github.pool_party.resistance_bot.command.HelpCommand
+import com.github.pool_party.resistance_bot.command.HistoryCommand
 import com.github.pool_party.resistance_bot.command.RulesCommand
 import com.github.pool_party.resistance_bot.command.StartCommand
 import com.github.pool_party.resistance_bot.command.StopCommand
@@ -35,6 +36,7 @@ fun Bot.initHandlers() {
         StartCommand(stateStorage, longCoder),
         StopCommand(stateStorage),
         ExtendCommand(stateStorage),
+        HistoryCommand(stateStorage),
         RulesCommand(),
         TagCommand(stateStorage),
     )

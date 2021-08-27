@@ -13,6 +13,8 @@ object Configuration {
     val PORT by int()
     val HOST by string()
 
+    val DEBUG by boolean()
+
     val LONGPOLL by boolean()
 
     val TELEGRAM_TOKEN by string()
@@ -23,7 +25,9 @@ object Configuration {
 
     val REJECTIONS_NUMBER by int()
 
-    const val SPY_MARK = """🦹‍♂️"""
+    const val SPY_MARK = """👹"""
+
+    const val CHOSEN_MARK = """🦹‍♂️"""
 
     const val APPROVE_MARK = """👍"""
 
@@ -46,5 +50,8 @@ object Configuration {
 
     init {
         check((PLAYERS_GAME_MINIMUM..PLAYERS_GAME_MAXIMUM).all { it in BOARDS })
+        if (DEBUG) {
+            System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "DEBUG")
+        }
     }
 }

@@ -1,11 +1,17 @@
 package com.github.pool_party.resistance_bot.message
 
+import com.github.pool_party.resistance_bot.state.GameState
 import com.github.pool_party.resistance_bot.state.Member
-import com.github.pool_party.resistance_bot.state.State
 import com.github.pool_party.resistance_bot.utils.makeUserLink
 
 // TODO add short description according to rules.
-const val RECEIVE_SPY_ROLE = """*Your role - the spy 🦹‍♂️*"""
+fun receiveSpyRole(otherSpies: List<String>) =
+    """
+    TODO:
+
+    *Your role - the spy 🦹‍♂️*
+    ${if (otherSpies.isEmpty()) "" else "Your team mates: ${otherSpies.joinToString { "`it`" }}" }
+    """.trimIndent()
 
 // TODO add short description according to rules.
 //  Rename the role, change emoji.
@@ -14,7 +20,7 @@ const val RECEIVE_RESISTANCE_ROLE = """*Your role - the resistant 🦸*"""
 // TODO Store the order of results in the state for chronological roadmap.
 //  Show all leaders in particular order.
 //  Discuss overall concept of round summary.
-fun roundSummary(state: State, leader: Member) =
+fun roundSummary(state: GameState, leader: Member) =
     """
     TODO: state:
 
@@ -26,7 +32,7 @@ fun roundSummary(state: State, leader: Member) =
     next leader: ${makeUserLink(leader.name, leader.id)}
     """.trimIndent()
 
-fun leaderChooseMessage(size: Int) = """*Choose the best team for the upcoming mission\! 👊* TODO: size: $size"""
+fun leaderChooseMessage(size: Int) = """*Choose the best team for the upcoming mission! 👊* TODO: size: $size"""
 
 const val VOTING_SUGGEST = """Head to the bot chat for the voting"""
 

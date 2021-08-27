@@ -41,16 +41,16 @@ fun onRegistrationTimestamp(time: Duration) =
     Type /start to begin a game or /stop to cancel the current registration
     """.trimIndent()
 
-const val ON_LESS_PLAYERS = """*Not enough players to begin a game\.\.\. 💁🏻‍♂️*"""
+const val ON_LESS_PLAYERS = """*Not enough players to begin a game... 💁🏻‍♂️*"""
 
-const val ON_MORE_PLAYERS = """*Too much players to begin a game\.\.\. 🤯👨‍👩‍👧‍👦*"""
+const val ON_MORE_PLAYERS = """*Too much players to begin a game... 🤯👨‍👩‍👧‍👦*"""
 
 fun onNewPlayerUpdate(members: List<Member>) =
     """
     |*Registration is open ✨*
 
     |${members.size} player${if (members.size == 1) "" else "s"} already joined:
-    |  \- ${members.joinToString("\n|  \\- ") { "`${it.name}`" }}
+    |  - ${members.joinToString("\n|  - ") { "`${it.name}`" }}
 
     |_${Configuration.PLAYERS_GAME_MINIMUM} to ${Configuration.PLAYERS_GAME_MAXIMUM} players is necessary_
     """.trimMargin()
@@ -58,9 +58,9 @@ fun onNewPlayerUpdate(members: List<Member>) =
 const val ON_REGISTRATION_STOP = """Registration is cancelled... 🗙"""
 
 fun onRegistrationSuccess(chatName: String?) =
-    """You have joined the game${if (chatName == null) "" else " in *$chatName*"}\! 🎯"""
+    """You have joined the game${if (chatName == null) "" else " in *$chatName*"}! 🎯"""
 
-const val ON_REGISTRATION_REPEAT = """*You have already joined\! 🔗*"""
+const val ON_REGISTRATION_REPEAT = """*You have already joined! 🔗*"""
 
-const val ON_GAME_START = """*Game is beginning\.\.\. 🙌*"""
+const val ON_GAME_START = """*Game is beginning... 🙌*"""
 

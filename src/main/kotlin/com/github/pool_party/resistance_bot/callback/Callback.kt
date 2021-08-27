@@ -8,6 +8,7 @@ import kotlinx.serialization.decodeFromByteArray
 import kotlinx.serialization.encodeToByteArray
 import kotlinx.serialization.protobuf.ProtoBuf
 import mu.KotlinLogging
+import java.text.DecimalFormat
 import kotlin.reflect.KClass
 
 /**
@@ -42,7 +43,10 @@ class CallbackDispatcher(callbacks: List<Callback>) : Interaction {
     override fun apply(bot: Bot) = bot.onCallbackQuery {
         val callbackData = it.data?.let { data -> CallbackData.of(data) }
 
-        logger.info { "callback ${it.from.username}@${it.message?.chat?.title}: ${it.data} >=> $callbackData" }
+        logger.info {
+            val bytes = it.data?.asSequence()?.joinToString("") { char -> "%02x".format(char.code.toByte()) }
+            "callback ${it.from.username}@${it.message?.chat?.title}: $bytes >=> $callbackData"
+        }
 
         if (callbackData == null) return@onCallbackQuery
 

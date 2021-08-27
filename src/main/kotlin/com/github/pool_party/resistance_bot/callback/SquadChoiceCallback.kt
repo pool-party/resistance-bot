@@ -5,9 +5,12 @@ import com.elbekD.bot.types.CallbackQuery
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.squadVote
 import com.github.pool_party.resistance_bot.state.StateStorage
+import com.github.pool_party.resistance_bot.utils.editMessageTextLogging
 import com.github.pool_party.resistance_bot.utils.goToBotMarkup
+import com.github.pool_party.resistance_bot.utils.logging
 import com.github.pool_party.resistance_bot.utils.makeUserLink
 import com.github.pool_party.resistance_bot.utils.name
+import com.github.pool_party.resistance_bot.utils.sendMessageLogging
 import com.github.pool_party.resistance_bot.utils.toMarkUp
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -24,7 +27,7 @@ class SquadChoiceCallback(private val stateStorage: StateStorage) : Callback {
 
     override val callbackDataKClass = SquadChoiceCallbackData::class
 
-    private val chosen = " ${Configuration.SPY_MARK}"
+    private val chosen = " ${Configuration.CHOSEN_MARK}"
 
     override suspend fun Bot.process(callbackQuery: CallbackQuery, callbackData: CallbackData) {
         val squadChoiceCallbackData = callbackData as? SquadChoiceCallbackData ?: return
@@ -35,7 +38,7 @@ class SquadChoiceCallback(private val stateStorage: StateStorage) : Callback {
         val message = callbackQuery.message
         val replyMarkup = message?.reply_markup
         val gameChatId = squadChoiceCallbackData.gameChatId
-        val state = stateStorage[gameChatId]
+        val state = stateStorage.getGameState(gameChatId)
 
         if (replyMarkup == null || state == null) {
             answerCallbackQuery(callbackQueryId)
@@ -55,39 +58,37 @@ class SquadChoiceCallback(private val stateStorage: StateStorage) : Callback {
 
         val clickedChosen = clicked.text.endsWith(chosen)
 
-        val warriors = buttons.asSequence().map { it.text }.filter { it.endsWith(chosen) }.toList()
+        val warriorMembers = buttons.asSequence()
+            .filter { it.text.endsWith(chosen) || (!clickedChosen && it == clicked) }
+            .map { SquadChoiceCallbackData.of(it.callback_data!!).personId }
+            .mapNotNull { id -> state.members.find { it.id == id } }
+            .toList()
 
-        if (!clickedChosen && warriors.size >= state.currentMissionAgentNumber - 1) {
+        if (!clickedChosen && warriorMembers.size >= state.currentMissionAgentNumber - 1) {
 
             answerCallbackQuery(callbackQueryId, "TODO: good job")
-            editMessageText(
-                userId,
+
+            state.squad = warriorMembers
+
+            editMessageTextLogging(
+                userId.toLong(),
                 message.message_id,
-                text = """
+                """
                     |TODO: chosen:
-                    |${(warriors + clicked.text).asSequence().map { it.removeSuffix(chosen) }.joinToString("\n|")}
+                    |${warriorMembers.joinToString("\n|") { it.name }}
                 """.trimMargin("|")
             )
 
-            sendMessage(
+            sendMessageLogging(
                 gameChatId,
                 """
                     |TODO:
                     |${makeUserLink(user.name, user.id.toLong())} has chosen:
 
-                    |${(warriors + clicked.text).asSequence().map { it.removeSuffix(chosen) }.joinToString("\n|")}
+                    |${warriorMembers.joinToString("\n|") { it.name }}
                 """.trimMargin("|"),
-                "MarkdownV2",
-                markup = goToBotMarkup(),
+                goToBotMarkup(),
             )
-
-            val memberIds = buttons.asSequence()
-                .filter { it.text.endsWith(chosen) }
-                .map { SquadChoiceCallbackData.of(it.callback_data!!).personId }
-                .plus(squadChoiceCallbackData.personId)
-                .toList()
-
-            state.squad = memberIds
 
             squadVote(gameChatId, state.members.map { it.id })
             return
@@ -104,7 +105,7 @@ class SquadChoiceCallback(private val stateStorage: StateStorage) : Callback {
                     else "${clicked.text}$chosen"
                 return@map it.copy(text = newText)
             }.toMarkUp()
-        )
+        ).logging()
 
         answerCallbackQuery(callbackQueryId)
     }

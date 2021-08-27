@@ -14,7 +14,9 @@ import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.utils.addBotMarkup
 import com.github.pool_party.resistance_bot.utils.chatId
 import com.github.pool_party.resistance_bot.utils.dec
+import com.github.pool_party.resistance_bot.utils.logging
 import com.github.pool_party.resistance_bot.utils.makeRegistrationMarkup
+import com.github.pool_party.resistance_bot.utils.sendMessageLogging
 import kotlinx.coroutines.delay
 import java.util.concurrent.CompletableFuture
 import kotlin.time.Duration.Companion.minutes
@@ -26,25 +28,24 @@ class GameCommand(private val stateStorage: StateStorage, private val longCoder:
         val chatId = message.chatId
 
         if (message.chat.type != "group" && message.chat.type != "supergroup") {
-            sendMessage(chatId, ON_PRIVATE_CHAT_REGISTRATION, "MarkdownV2", markup = addBotMarkup())
+            sendMessageLogging(chatId, ON_PRIVATE_CHAT_REGISTRATION, addBotMarkup())
             return
         }
 
         val registrationMessageIdFuture = CompletableFuture<Int>()
 
-        if (!stateStorage.newState(chatId, registrationMessageIdFuture, message.chat.title)) {
-            sendMessage(chatId, ON_ONGOING_REGISTRATION, "MarkdownV2")
+        if (!stateStorage.newRegistrationState(chatId, registrationMessageIdFuture, message.chat.title)) {
+            sendMessageLogging(chatId, ON_ONGOING_REGISTRATION)
             return
         }
 
         val registrationMessage: Message
 
         try {
-            registrationMessage = sendMessage(
+            registrationMessage = sendMessageLogging(
                 chatId,
                 REGISTRATION_MSG,
-                "MarkdownV2",
-                markup = makeRegistrationMarkup(longCoder.encode(chatId))
+                makeRegistrationMarkup(longCoder.encode(chatId)),
             ).join()
         } catch (e: Throwable) {
             registrationMessageIdFuture.completeExceptionally(e)
@@ -53,10 +54,10 @@ class GameCommand(private val stateStorage: StateStorage, private val longCoder:
 
         val registrationMessageId = registrationMessage.message_id
         registrationMessageIdFuture.complete(registrationMessageId)
-        pinChatMessage(chatId, registrationMessageId, disableNotification = true)
+        pinChatMessage(chatId, registrationMessageId, disableNotification = true).logging()
 
         // TODO check behaviour.
-        val state = stateStorage[chatId] ?: return
+        val state = stateStorage.getRegistrationState(chatId) ?: return
 
         val extendTime = Configuration.REGISTRATION_EXTEND
         val registrationDuration = Configuration.REGISTRATION_TIME
@@ -81,7 +82,7 @@ class GameCommand(private val stateStorage: StateStorage, private val longCoder:
                 if (!timeLeft.isPositive()) break
             }
 
-            sendMessage(chatId, onRegistrationTimestamp(timeLeft + extendTime * extends.get()), "MarkdownV2")
+            sendMessageLogging(chatId, onRegistrationTimestamp(timeLeft + extendTime * extends.get()))
 
             delayTime = extendTime
         }

@@ -4,10 +4,11 @@ import com.elbekD.bot.Bot
 import com.elbekD.bot.types.CallbackQuery
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.chooseSquad
+import com.github.pool_party.resistance_bot.state.GameState
 import com.github.pool_party.resistance_bot.state.Member
-import com.github.pool_party.resistance_bot.state.State
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.state.Vote
+import com.github.pool_party.resistance_bot.utils.editMessageTextLogging
 import com.github.pool_party.resistance_bot.utils.name
 
 interface VoteCallbackData {
@@ -19,12 +20,12 @@ abstract class AbstractVoteCallback(protected val stateStorage: StateStorage) : 
 
     abstract suspend fun getMemberNumber(voteCallbackData: VoteCallbackData): Int?
 
-    abstract suspend fun Bot.processResults(chatId: Long, state: State, votes: List<Vote>)
+    abstract suspend fun Bot.processResults(chatId: Long, state: GameState, votes: List<Vote>)
 
     override suspend fun Bot.process(callbackQuery: CallbackQuery, callbackData: CallbackData) {
         val voteCallbackData = callbackData as? VoteCallbackData ?: return
         val gameChatId = voteCallbackData.gameChatId
-        val state = stateStorage[gameChatId] ?: return
+        val state = stateStorage.getGameState(gameChatId) ?: return
         val user = callbackQuery.from
         val newVote = state.vote(Member(user.id.toLong(), user.name), voteCallbackData.verdict)
         val messageId = callbackQuery.message?.message_id
@@ -34,8 +35,8 @@ abstract class AbstractVoteCallback(protected val stateStorage: StateStorage) : 
         if (messageId == null) return
 
         //TODO Make unique symbols for different votes.
-        editMessageText(
-            user.id,
+        editMessageTextLogging(
+            user.id.toLong(),
             messageId,
             text = if (voteCallbackData.verdict) Configuration.APPROVE_MARK else Configuration.REJECT_MARK
         )
@@ -49,7 +50,7 @@ abstract class AbstractVoteCallback(protected val stateStorage: StateStorage) : 
         }
     }
 
-    protected suspend fun Bot.nextSquadChoice(chatId: Long, state: State) {
+    protected suspend fun Bot.nextSquadChoice(chatId: Long, state: GameState) {
         state.nextLeader()
         chooseSquad(chatId, stateStorage)
     }

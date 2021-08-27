@@ -15,8 +15,10 @@ import com.github.pool_party.resistance_bot.state.Member
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.utils.addBotMarkup
 import com.github.pool_party.resistance_bot.utils.chatId
+import com.github.pool_party.resistance_bot.utils.editMessageTextLogging
 import com.github.pool_party.resistance_bot.utils.makeRegistrationMarkup
 import com.github.pool_party.resistance_bot.utils.name
+import com.github.pool_party.resistance_bot.utils.sendMessageLogging
 
 class StartCommand(private val stateStorage: StateStorage, private val longCoder: Coder<Long>) :
     AbstractCommand("start", "finish the registration and begin a game", HELP_START) {
@@ -29,7 +31,7 @@ class StartCommand(private val stateStorage: StateStorage, private val longCoder
 
     private suspend fun Bot.register(message: Message, code: String) {
         val chatId = longCoder.decode(code)
-        val state = stateStorage[chatId]
+        val state = stateStorage.getRegistrationState(chatId)
         val senderId = message.chatId
         val senderName = message.from?.name ?: return
 
@@ -42,31 +44,30 @@ class StartCommand(private val stateStorage: StateStorage, private val longCoder
 
         state.withStarted { started ->
             if (started) {
-                sendMessage(senderId, "TODO: the game has already started")
+                sendMessageLogging(senderId, "TODO: the game has already started")
                 return@withStarted true
             }
 
             val members = state.members
 
             if (members.asSequence().map { it.id }.contains(senderId)) {
-                sendMessage(senderId, ON_REGISTRATION_REPEAT, "MarkdownV2")
+                sendMessageLogging(senderId, ON_REGISTRATION_REPEAT)
                 return@withStarted false
             }
 
             members += Member(senderId, senderName)
             val registrationMessageId = state.registrationMessageId
 
-            sendMessage(senderId, onRegistrationSuccess(state.chatName), "MarkdownV2")
+            sendMessageLogging(senderId, onRegistrationSuccess(state.chatName))
 
-            editMessageText(
+            editMessageTextLogging(
                 chatId,
                 registrationMessageId,
-                text = onNewPlayerUpdate(members),
-                parseMode = "MarkdownV2",
-                markup = makeRegistrationMarkup(code),
+                onNewPlayerUpdate(members),
+                makeRegistrationMarkup(code),
             ).join()
 
-            startingGame = members.size >= Configuration.PLAYERS_GAME_MINIMUM
+            startingGame = members.size >= Configuration.PLAYERS_GAME_MAXIMUM
             startingGame
         }
 
@@ -74,15 +75,15 @@ class StartCommand(private val stateStorage: StateStorage, private val longCoder
     }
 
     private fun Bot.sendGreetings(message: Message) {
-        sendMessage(message.chatId, INIT_MSG, markup = addBotMarkup())
+        sendMessageLogging(message.chatId, INIT_MSG, addBotMarkup())
     }
 
     private suspend fun Bot.startGameCommand(message: Message) {
         val chatId = message.chatId
-        val state = stateStorage[chatId]
+        val state = stateStorage.getRegistrationState(chatId)
 
         if (state == null) {
-            sendMessage(chatId, ON_NO_REGISTRATION_START, "MarkdownV2")
+            sendMessageLogging(chatId, ON_NO_REGISTRATION_START)
             return
         }
 

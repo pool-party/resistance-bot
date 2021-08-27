@@ -5,10 +5,11 @@ import com.elbekD.bot.types.Message
 import com.github.pool_party.resistance_bot.message.GAME_RULES
 import com.github.pool_party.resistance_bot.message.HELP_RULES
 import com.github.pool_party.resistance_bot.utils.chatId
+import com.github.pool_party.resistance_bot.utils.sendMessageLogging
 
 class RulesCommand : AbstractCommand("rules", "show the list of rules", HELP_RULES) {
 
     override suspend fun Bot.action(message: Message, args: List<String>) {
-        sendMessage(message.chatId, GAME_RULES/*, "MarkdownV2*/)
+        sendMessageLogging(message.chatId, GAME_RULES)
     }
 }
