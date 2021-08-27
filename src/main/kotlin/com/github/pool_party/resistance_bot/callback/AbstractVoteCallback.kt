@@ -34,7 +34,7 @@ abstract class AbstractVoteCallback(protected val stateStorage: StateStorage) : 
 
         if (messageId == null) return
 
-        //TODO Make unique symbols for different votes.
+        // TODO Make unique symbols for different votes.
         editMessageTextLogging(
             user.id.toLong(),
             messageId,

@@ -14,7 +14,11 @@ interface StateStorage {
     /**
      * Returns whether new game has been initialized or there is already one in progress.
      */
-    fun newRegistrationState(chatId: Long, registrationMessageId: CompletableFuture<Int>, chatName: String? = null): Boolean
+    fun newRegistrationState(
+        chatId: Long,
+        registrationMessageId: CompletableFuture<Int>,
+        chatName: String? = null,
+    ): Boolean
 
     fun gameOver(chatId: Long)
 }

@@ -23,7 +23,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx", "kotlinx-serialization-protobuf", "1.2.2")
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.5.1")
 
-
     implementation("com.github.elbekD", "kt-telegram-bot", "1.3.8")
 
     implementation("com.natpryce", "konfig", "1.6.10.0")

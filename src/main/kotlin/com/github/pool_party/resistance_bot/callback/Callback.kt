@@ -8,7 +8,6 @@ import kotlinx.serialization.decodeFromByteArray
 import kotlinx.serialization.encodeToByteArray
 import kotlinx.serialization.protobuf.ProtoBuf
 import mu.KotlinLogging
-import java.text.DecimalFormat
 import kotlin.reflect.KClass
 
 /**

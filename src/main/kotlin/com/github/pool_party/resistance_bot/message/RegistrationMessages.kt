@@ -63,4 +63,3 @@ fun onRegistrationSuccess(chatName: String?) =
 const val ON_REGISTRATION_REPEAT = """*You have already joined! 🔗*"""
 
 const val ON_GAME_START = """*Game is beginning... 🙌*"""
-
