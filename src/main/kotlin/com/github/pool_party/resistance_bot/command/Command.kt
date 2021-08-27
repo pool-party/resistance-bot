@@ -8,6 +8,12 @@ import mu.KotlinLogging
 import java.time.LocalDateTime
 import kotlin.system.measureNanoTime
 
+enum class CommandType {
+    REGISTRATION,
+    GAME,
+    UTILS,
+}
+
 interface Command : Interaction {
 
     /**
@@ -25,13 +31,19 @@ interface Command : Interaction {
      */
     val helpMessage: String
 
+    /**
+     * Affects only indentation in /help command
+     */
+    val commandType: CommandType
+
     fun toBotCommand() = BotCommand(command, description)
 }
 
 abstract class AbstractCommand(
     commandName: String,
     override val description: String,
-    override val helpMessage: String
+    override val helpMessage: String,
+    override val commandType: CommandType,
 ) : Command {
 
     private val logger = KotlinLogging.logger {}

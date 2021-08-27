@@ -20,12 +20,13 @@ fun List<InlineKeyboardButton>.toMarkUp() = InlineKeyboardMarkup(listOf(this))
 fun makeRegistrationMarkup(hash: String) =
     listOf(InlineKeyboardButton(REGISTRATION_BUTTON, url = botLink(hash))).toMarkUp()
 
-fun addBotMarkup() = listOf(InlineKeyboardButton(INIT_MARKUP,
-    url = "https://t.me/${Configuration.USERNAME}?startgroup=true")).toMarkUp()
+fun addBotMarkup() = listOf(
+    InlineKeyboardButton(INIT_MARKUP, url = "https://t.me/${Configuration.USERNAME}?startgroup=true")
+).toMarkUp()
 
 fun goToBotMarkup() = listOf(InlineKeyboardButton(VOTING_SUGGEST, url = botLink())).toMarkUp()
 
 fun botLink(hash: String? = null) =
-    "https://t.me/${Configuration.USERNAME}${if (hash == null) "" else "?start=${hash}"}"
+    "https://t.me/${Configuration.USERNAME}${if (hash == null) "" else "?start=$hash"}"
 
-fun makeUserLink(name: String, id: Long) = "[${name}](tg://user?id=${id})"
+fun makeUserLink(name: String, id: Long) = "[$name](tg://user?id=$id)"

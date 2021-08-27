@@ -2,17 +2,19 @@ package com.github.pool_party.resistance_bot.command
 
 import com.elbekD.bot.Bot
 import com.elbekD.bot.types.Message
-import com.github.pool_party.resistance_bot.message.HELP_EXTEND
+import com.github.pool_party.resistance_bot.message.HELP_TAG
+import com.github.pool_party.resistance_bot.message.ON_NO_REGISTRATION
+import com.github.pool_party.resistance_bot.message.tagAfkPlayers
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.utils.chatId
-import com.github.pool_party.resistance_bot.utils.makeUserLink
+import com.github.pool_party.resistance_bot.utils.sendMessageLogging
 
 class TagCommand(private val stateStorage: StateStorage) :
-    AbstractCommand("tag", "tag the ones you are waiting for", HELP_EXTEND) {
+    AbstractCommand("tag", "notify players delaying a game", HELP_TAG, CommandType.GAME) {
 
     override suspend fun Bot.action(message: Message, args: List<String>) {
         val chatId = message.chatId
-        val state = stateStorage[chatId]
+        val state = stateStorage.getGameState(chatId)
 
         val members = if (state == null) {
             listOf()
@@ -27,17 +29,10 @@ class TagCommand(private val stateStorage: StateStorage) :
         }
 
         if (members.isEmpty()) {
-            sendMessage(chatId, "No one to wait for", replyTo = message.message_id)
+            sendMessageLogging(chatId, ON_NO_REGISTRATION, replyTo = message.message_id)
             return
         }
 
-        sendMessage(
-            chatId,
-            """
-            |TODO: waiting for:
-            |${members.joinToString("|\n") { makeUserLink(it.name, it.id) }}
-            """.trimMargin(),
-            "MarkdownV2",
-        )
+        sendMessageLogging(chatId, tagAfkPlayers(members))
     }
 }

@@ -1,7 +1,6 @@
 package com.github.pool_party.resistance_bot.message
 
 // TODO figure out if admin rights are necessary and provide following messages at all required endpoints.
-//  Create a button for adding bot to the group chat (this message provided only in private chat) (ex. Mafia bot).
 val INIT_MSG =
     """
     Hey! I'm an online version of board game "Resistance"!
@@ -16,11 +15,15 @@ val INIT_MSG =
 
 const val INIT_MARKUP = """Add a game to your group chat ✉️"""
 
-fun helpMessage(helpMessages: Map<String, String>) =
+fun helpMessage(groups: List<Map<String, String>>) =
     """
     |Available commands:
     |
-    |${helpMessages.asSequence().joinToString("\n|") { "${it.key} - ${it.value}" }}
+    |${
+    groups.joinToString("\n|\n|") { list ->
+        list.asSequence().joinToString("\n|") { "${it.key} - ${it.value}" }
+    }
+    }
     """.trimMargin()
 
 val HELP_GAME =
@@ -47,9 +50,23 @@ val HELP_STOP =
     /stop - cancel the current registration
     """.trimIndent()
 
+val HELP_TAG =
+    """
+    /tag - notify players delaying a game
+
+    Mentions players who still haven't made necessary actions to continue a game
+    """.trimIndent()
+
+val HELP_HISTORY =
+    """
+    /history - show round history
+
+    Contains the information about mission's order, results and teams
+    """.trimIndent()
+
 val HELP_EXTEND =
     """
-    /extend - add extra 30 seconds for registration
+    /extend - add extra 30s for registration
     """.trimIndent()
 
 // TODO PullPartyBot message, might change

@@ -3,11 +3,14 @@ package com.github.pool_party.resistance_bot.callback
 import com.elbekD.bot.Bot
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.missionVote
-import com.github.pool_party.resistance_bot.state.State
+import com.github.pool_party.resistance_bot.message.TEAM_APPROVED
+import com.github.pool_party.resistance_bot.message.gameResult
+import com.github.pool_party.resistance_bot.message.teamRejected
+import com.github.pool_party.resistance_bot.state.GameState
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.state.Vote
 import com.github.pool_party.resistance_bot.utils.goToBotMarkup
-import com.github.pool_party.resistance_bot.utils.makeUserLink
+import com.github.pool_party.resistance_bot.utils.sendMessageLogging
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -21,39 +24,29 @@ class SquadVoteCallback(stateStorage: StateStorage) : AbstractVoteCallback(state
     override val callbackDataKClass = SquadVoteCallbackData::class
 
     override suspend fun getMemberNumber(voteCallbackData: VoteCallbackData): Int? =
-        stateStorage[voteCallbackData.gameChatId]?.members?.size
+        stateStorage.getGameState(voteCallbackData.gameChatId)?.members?.size
 
-    override suspend fun Bot.processResults(chatId: Long, state: State, votes: List<Vote>) {
-        val result = votes.count { it.second } >= votes.size
-        val downVoters = votes.asSequence().filter { !it.second }.map { it.first }
+    override suspend fun Bot.processResults(chatId: Long, state: GameState, votes: List<Vote>) {
+        val isApproved = votes.count { it.second } >= votes.size
 
-        if (result) {
-            val squad = state.squad
-            if (squad == null) {
-                sendMessage(chatId, "TODO: gg 500")
-                return
-            }
+        if (isApproved) {
+            val squad = state.squad ?: return
 
-            sendMessage(chatId, "TODO: SQUAD chosen", markup = goToBotMarkup())
-            missionVote(chatId, squad)
+            sendMessageLogging(chatId, TEAM_APPROVED, goToBotMarkup())
+            missionVote(chatId, squad.map { it.id })
             return
         }
 
-        sendMessage(
-            chatId,
-            """
-                |TODO: SQUAD choice failed
-                |against:
-                |${downVoters.joinToString("\n|") { makeUserLink(it.name, it.id) }}
-            """.trimMargin("|"),
-            "MarkdownV2"
-        )
+        val membersAgainst = votes.filter { !it.second }.map { it.first }
+
+        sendMessageLogging(chatId, teamRejected(membersAgainst))
 
         if (++state.squadRejections >= Configuration.REJECTIONS_NUMBER) {
-            sendMessage(chatId, "TODO: spies won")
+            sendMessageLogging(chatId, gameResult(true))
             stateStorage.gameOver(chatId)
             return
         }
+
         nextSquadChoice(chatId, state)
     }
 }

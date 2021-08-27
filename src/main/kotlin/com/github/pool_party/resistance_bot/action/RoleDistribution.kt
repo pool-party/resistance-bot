@@ -2,18 +2,19 @@ package com.github.pool_party.resistance_bot.action
 
 import com.elbekD.bot.Bot
 import com.github.pool_party.resistance_bot.message.RECEIVE_RESISTANCE_ROLE
-import com.github.pool_party.resistance_bot.message.RECEIVE_SPY_ROLE
+import com.github.pool_party.resistance_bot.message.receiveSpyRole
 import com.github.pool_party.resistance_bot.state.StateStorage
+import com.github.pool_party.resistance_bot.utils.sendMessageLogging
 
 suspend fun Bot.distributeRoles(chatId: Long, stateStorage: StateStorage) {
-    val state = stateStorage[chatId] ?: return
-
-    val shuffled = state.members.shuffled()
-    val spyNumber = state.board.spyNumber
+    val state = stateStorage.getGameState(chatId) ?: return
 
     // TODO send cards from assets with caption.
-    shuffled.take(spyNumber).forEach { sendMessage(it.id, RECEIVE_SPY_ROLE, "MarkdownV2") }
-    shuffled.drop(spyNumber).forEach { sendMessage(it.id, RECEIVE_RESISTANCE_ROLE, "MarkdownV2") }
+    val spies = state.spies
+    spies.forEach { spy ->
+        sendMessageLogging(spy.id, receiveSpyRole((spies - spy).map { it.name })).join()
+    }
+    state.resistance.forEach { sendMessageLogging(it.id, RECEIVE_RESISTANCE_ROLE).join() }
 
     chooseSquad(chatId, stateStorage)
 }
