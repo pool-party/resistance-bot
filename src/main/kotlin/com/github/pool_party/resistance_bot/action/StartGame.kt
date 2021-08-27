@@ -10,8 +10,7 @@ import com.github.pool_party.resistance_bot.state.StateStorage
 suspend fun Bot.startGame(chatId: Long, stateStorage: StateStorage) {
     val state = stateStorage[chatId] ?: return
 
-    editMessageText(chatId, state.registrationMessageId, text = "TODO: registration is closed")
-    unpinChatMessage(chatId, state.registrationMessageId)
+    deleteMessage(chatId, state.registrationMessageId)
 
     val playersAmount = state.members.size
 

@@ -34,11 +34,10 @@ object Configuration {
     val BOARDS = sequenceOf(
         Board(3, 2, listOf(2, 3, 2, 3, 3)),
         Board(3, 3, listOf(2, 3, 4, 3, 4)),
-        // TODO boards for 7-10
-        Board(4, 3, listOf(2, 3, 4, 3, 4)),
-        Board(5, 3, listOf(2, 3, 4, 3, 4)),
-        Board(6, 3, listOf(2, 3, 4, 3, 4)),
-        Board(6, 4, listOf(2, 3, 4, 3, 4)),
+        Board(4, 3, listOf(2, 3, 3, 4, 4)),
+        Board(5, 3, listOf(3, 4, 4, 5, 5)),
+        Board(6, 3, listOf(3, 4, 4, 5, 5)),
+        Board(6, 4, listOf(3, 4, 4, 5, 5)),
     ).associateBy { it.capacity }
 
     val PLAYERS_GAME_MINIMUM = BOARDS.keys.minOrNull()!!

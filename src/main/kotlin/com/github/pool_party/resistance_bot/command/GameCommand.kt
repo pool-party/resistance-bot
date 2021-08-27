@@ -81,7 +81,7 @@ class GameCommand(private val stateStorage: StateStorage, private val longCoder:
                 if (!timeLeft.isPositive()) break
             }
 
-            sendMessage(chatId, onRegistrationTimestamp(timeLeft), "MarkdownV2")
+            sendMessage(chatId, onRegistrationTimestamp(timeLeft + extendTime * extends.get()), "MarkdownV2")
 
             delayTime = extendTime
         }

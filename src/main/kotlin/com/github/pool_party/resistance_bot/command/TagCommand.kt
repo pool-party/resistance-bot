@@ -26,6 +26,11 @@ class TagCommand(private val stateStorage: StateStorage) :
             }
         }
 
+        if (members.isEmpty()) {
+            sendMessage(chatId, "No one to wait for", replyTo = message.message_id)
+            return
+        }
+
         sendMessage(
             chatId,
             """

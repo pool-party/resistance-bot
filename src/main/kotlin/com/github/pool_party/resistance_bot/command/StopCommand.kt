@@ -14,7 +14,7 @@ class StopCommand(private val stateStorage: StateStorage) :
         val chatId = message.chatId
 
         sendMessage(chatId, ON_REGISTRATION_STOP, "MarkdownV2")
-        stateStorage[chatId]?.registrationMessageId?.let { unpinChatMessage(chatId, it) }
+        stateStorage[chatId]?.registrationMessageId?.let { deleteMessage(chatId, it) }
         stateStorage.gameOver(chatId)
     }
 }

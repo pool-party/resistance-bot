@@ -66,7 +66,7 @@ class StartCommand(private val stateStorage: StateStorage, private val longCoder
                 markup = makeRegistrationMarkup(code),
             ).join()
 
-            startingGame = members.size >= Configuration.PLAYERS_GAME_MAXIMUM
+            startingGame = members.size >= Configuration.PLAYERS_GAME_MINIMUM
             startingGame
         }
 

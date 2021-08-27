@@ -11,7 +11,7 @@ import com.github.pool_party.resistance_bot.utils.inc
 class ExtendCommand(private val stateStorage: StateStorage) :
     AbstractCommand(
         "extend",
-        "add extra ${Configuration.REGISTRATION_EXTEND.inWholeSeconds} seconds for registration",
+        "add extra ${Configuration.REGISTRATION_EXTEND.inWholeSeconds} for registration",
         HELP_EXTEND,
     ) {
 
