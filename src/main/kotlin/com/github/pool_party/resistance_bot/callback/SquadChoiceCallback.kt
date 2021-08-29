@@ -76,7 +76,7 @@ class SquadChoiceCallback(private val stateStorage: StateStorage) : Callback {
                 """
                     |TODO: chosen:
                     |${warriorMembers.joinToString("\n|") { it.name }}
-                """.trimMargin("|")
+                """.trimMargin()
             )
 
             sendMessageLogging(
@@ -86,7 +86,7 @@ class SquadChoiceCallback(private val stateStorage: StateStorage) : Callback {
                     |${makeUserLink(user.name, user.id.toLong())} has chosen:
 
                     |${warriorMembers.joinToString("\n|") { it.name }}
-                """.trimMargin("|"),
+                """.trimMargin(),
                 goToBotMarkup(),
             )
 

@@ -46,5 +46,26 @@ const val VOTING_SUGGEST = """Head to the bot chat for the voting"""
 // TODO Show the names of included players (in a beautiful way).
 const val TEAM_VOTE = """Do you trust this team a mission? 🤨"""
 
+val TEAM_APPROVED =
+    """
+    *Suggested team is approved by the most players 👍*
+
+    Time to make your mission votes!
+    """.trimIndent()
+
+fun teamRejected(membersAgainst: List<Member>) =
+    """
+    |*Suggested team doesn't have player's trust 👎*
+    |
+    |Voted against:
+    |${membersAgainst.joinToString("\n|") { "- ${makeUserLink(it.name, it.id)}" }}
+    """.trimMargin()
+
 // TODO Consider using different button marks for this vote.
 const val MISSION_VOTE = """Make your choice 🤔"""
+
+//TODO Show all members with the roles (lookup to mafia game).
+fun gameResult(areSpiesWon: Boolean) =
+    """
+    TODO
+    """.trimIndent()

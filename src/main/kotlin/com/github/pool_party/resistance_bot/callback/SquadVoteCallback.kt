@@ -3,6 +3,9 @@ package com.github.pool_party.resistance_bot.callback
 import com.elbekD.bot.Bot
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.missionVote
+import com.github.pool_party.resistance_bot.message.TEAM_APPROVED
+import com.github.pool_party.resistance_bot.message.gameResult
+import com.github.pool_party.resistance_bot.message.teamRejected
 import com.github.pool_party.resistance_bot.state.GameState
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.state.Vote
@@ -25,35 +28,26 @@ class SquadVoteCallback(stateStorage: StateStorage) : AbstractVoteCallback(state
         stateStorage.getGameState(voteCallbackData.gameChatId)?.members?.size
 
     override suspend fun Bot.processResults(chatId: Long, state: GameState, votes: List<Vote>) {
-        val result = votes.count { it.second } >= votes.size
-        val downVoters = votes.asSequence().filter { !it.second }.map { it.first }
+        val isApproved = votes.count { it.second } >= votes.size
 
-        if (result) {
-            val squad = state.squad
-            if (squad == null) {
-                sendMessageLogging(chatId, "TODO: gg 500")
-                return
-            }
+        if (isApproved) {
+            val squad = state.squad ?: return
 
-            sendMessageLogging(chatId, "TODO: SQUAD chosen", goToBotMarkup())
+            sendMessageLogging(chatId, TEAM_APPROVED, goToBotMarkup())
             missionVote(chatId, squad.map { it.id })
             return
         }
 
-        sendMessageLogging(
-            chatId,
-            """
-                |TODO: SQUAD choice failed
-                |against:
-                |${downVoters.joinToString("\n|") { makeUserLink(it.name, it.id) }}
-            """.trimMargin("|"),
-        )
+        val membersAgainst = votes.filter { !it.second }.map { it.first }
+
+        sendMessageLogging(chatId, teamRejected(membersAgainst))
 
         if (++state.squadRejections >= Configuration.REJECTIONS_NUMBER) {
-            sendMessageLogging(chatId, "TODO: spies won")
+            sendMessageLogging(chatId, gameResult(true))
             stateStorage.gameOver(chatId)
             return
         }
+
         nextSquadChoice(chatId, state)
     }
 }
