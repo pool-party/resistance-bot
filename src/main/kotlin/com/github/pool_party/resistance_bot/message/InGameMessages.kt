@@ -10,7 +10,7 @@ fun receiveSpyRole(otherSpies: List<String>) =
     TODO:
 
     *Your role - the spy 🦹‍♂️*
-    ${if (otherSpies.isEmpty()) "" else "Your team mates: ${otherSpies.joinToString { "`it`" }}" }
+    ${if (otherSpies.isEmpty()) "" else "Your teammates: ${otherSpies.joinToString { "`it`" }}" }
     """.trimIndent()
 
 // TODO add short description according to rules.
@@ -31,6 +31,13 @@ fun roundSummary(state: GameState, leader: Member) =
 
     next leader: ${makeUserLink(leader.name, leader.id)}
     """.trimIndent()
+
+fun history(state: GameState) =
+    """
+    |*Previously in the game 📜*:
+    |
+    |${state.history.withIndex().joinToString("\n|") { "${it.index + 1}. ${it.value}"}}
+    """.trimMargin()
 
 fun leaderChooseMessage(size: Int) = """*Choose the best team for the upcoming mission! 👊* TODO: size: $size"""
 

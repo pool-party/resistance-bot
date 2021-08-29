@@ -47,6 +47,20 @@ val HELP_STOP =
     /stop - cancel the current registration
     """.trimIndent()
 
+val HELP_TAG =
+    """
+    /tag - notifies players delaying a game
+
+    Mentions players who still haven't made necessary actions to continue a game
+    """.trimIndent()
+
+val HELP_HISTORY =
+    """
+    /history - shows round history
+
+    Contains the information about mission's order, results and teams
+    """.trimIndent()
+
 val HELP_EXTEND =
     """
     /extend - add extra 30 seconds for registration
