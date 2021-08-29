@@ -10,7 +10,6 @@ import com.github.pool_party.resistance_bot.state.GameState
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.state.Vote
 import com.github.pool_party.resistance_bot.utils.goToBotMarkup
-import com.github.pool_party.resistance_bot.utils.makeUserLink
 import com.github.pool_party.resistance_bot.utils.sendMessageLogging
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

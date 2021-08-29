@@ -6,7 +6,8 @@ import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.startGame
 import com.github.pool_party.resistance_bot.message.HELP_START
 import com.github.pool_party.resistance_bot.message.INIT_MSG
-import com.github.pool_party.resistance_bot.message.ON_NO_REGISTRATION_START
+import com.github.pool_party.resistance_bot.message.ON_NO_REGISTRATION
+import com.github.pool_party.resistance_bot.message.ON_ONGOING_GAME
 import com.github.pool_party.resistance_bot.message.ON_REGISTRATION_REPEAT
 import com.github.pool_party.resistance_bot.message.onNewPlayerUpdate
 import com.github.pool_party.resistance_bot.message.onRegistrationSuccess
@@ -21,7 +22,12 @@ import com.github.pool_party.resistance_bot.utils.name
 import com.github.pool_party.resistance_bot.utils.sendMessageLogging
 
 class StartCommand(private val stateStorage: StateStorage, private val longCoder: Coder<Long>) :
-    AbstractCommand("start", "finish the registration and begin a game", HELP_START) {
+    AbstractCommand(
+        "start",
+        "finish the registration and begin a game",
+        HELP_START,
+        CommandType.REGISTRATION,
+    ) {
 
     override suspend fun Bot.action(message: Message, args: List<String>) = when {
         message.chat.type.let { it == "group" || it == "supergroup" } -> startGameCommand(message)
@@ -44,7 +50,7 @@ class StartCommand(private val stateStorage: StateStorage, private val longCoder
 
         state.withStarted { started ->
             if (started) {
-                sendMessageLogging(senderId, "TODO: the game has already started")
+                sendMessageLogging(senderId, ON_ONGOING_GAME)
                 return@withStarted true
             }
 
@@ -83,7 +89,7 @@ class StartCommand(private val stateStorage: StateStorage, private val longCoder
         val state = stateStorage.getRegistrationState(chatId)
 
         if (state == null) {
-            sendMessageLogging(chatId, ON_NO_REGISTRATION_START)
+            sendMessageLogging(chatId, ON_NO_REGISTRATION)
             return
         }
 

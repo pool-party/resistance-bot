@@ -39,7 +39,15 @@ fun history(state: GameState) =
     |${state.history.withIndex().joinToString("\n|") { "${it.index + 1}. ${it.value}"}}
     """.trimMargin()
 
-fun leaderChooseMessage(size: Int) = """*Choose the best team for the upcoming mission! 👊* TODO: size: $size"""
+fun leaderChooseMessage(size: Int) = """*Choose the best team of $size members for the upcoming mission\! 👊*"""
+
+// TODO Singular form.
+fun tagAfkPlayers(members: List<Member>) =
+    """
+    |*Still haven't made up their minds ⌛*:
+    |
+    |${members.joinToString("|\n") { "- ${makeUserLink(it.name, it.id)}" }}
+    """.trimMargin()
 
 const val VOTING_SUGGEST = """Head to the bot chat for the voting"""
 

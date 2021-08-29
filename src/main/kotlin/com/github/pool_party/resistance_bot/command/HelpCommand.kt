@@ -11,7 +11,10 @@ class HelpCommand(commands: List<Command>) :
     AbstractCommand(
         "help",
         "show this usage guide",
-        helpMessage(commands.associate { it.command to it.description }),
+        helpMessage(commands.groupBy { it.commandType }.values.map { list ->
+            list.associate { it.command to it.description }
+        }),
+        CommandType.UTILS,
     ) {
 
     private val helpMessages = commands.associate { it.command.removePrefix("/") to it.helpMessage }

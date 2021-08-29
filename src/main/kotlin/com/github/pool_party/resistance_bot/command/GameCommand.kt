@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture
 import kotlin.time.Duration.Companion.minutes
 
 class GameCommand(private val stateStorage: StateStorage, private val longCoder: Coder<Long>) :
-    AbstractCommand("game", "start the registration", HELP_GAME) {
+    AbstractCommand("game", "start the registration", HELP_GAME, CommandType.REGISTRATION) {
 
     override suspend fun Bot.action(message: Message, args: List<String>) {
         val chatId = message.chatId

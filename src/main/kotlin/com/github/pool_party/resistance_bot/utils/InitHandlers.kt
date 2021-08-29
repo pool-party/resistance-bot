@@ -35,10 +35,10 @@ fun Bot.initHandlers() {
         GameCommand(stateStorage, longCoder),
         StartCommand(stateStorage, longCoder),
         StopCommand(stateStorage),
-        ExtendCommand(stateStorage),
-        HistoryCommand(stateStorage),
-        RulesCommand(),
         TagCommand(stateStorage),
+        HistoryCommand(stateStorage),
+        ExtendCommand(stateStorage),
+        RulesCommand(),
     )
 
     val commands = interactions.mapNotNull { it as? Command }.toMutableList()

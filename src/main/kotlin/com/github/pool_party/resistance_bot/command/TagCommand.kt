@@ -3,13 +3,14 @@ package com.github.pool_party.resistance_bot.command
 import com.elbekD.bot.Bot
 import com.elbekD.bot.types.Message
 import com.github.pool_party.resistance_bot.message.HELP_TAG
+import com.github.pool_party.resistance_bot.message.ON_NO_REGISTRATION
+import com.github.pool_party.resistance_bot.message.tagAfkPlayers
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.utils.chatId
-import com.github.pool_party.resistance_bot.utils.makeUserLink
 import com.github.pool_party.resistance_bot.utils.sendMessageLogging
 
 class TagCommand(private val stateStorage: StateStorage) :
-    AbstractCommand("tag", "notifies players delaying a game", HELP_TAG) {
+    AbstractCommand("tag", "notifies players delaying a game", HELP_TAG, CommandType.GAME) {
 
     override suspend fun Bot.action(message: Message, args: List<String>) {
         val chatId = message.chatId
@@ -28,16 +29,10 @@ class TagCommand(private val stateStorage: StateStorage) :
         }
 
         if (members.isEmpty()) {
-            sendMessageLogging(chatId, "No one to wait for", replyTo = message.message_id)
+            sendMessageLogging(chatId, ON_NO_REGISTRATION, replyTo = message.message_id)
             return
         }
 
-        sendMessageLogging(
-            chatId,
-            """
-            |TODO: waiting for:
-            |${members.joinToString("|\n") { makeUserLink(it.name, it.id) }}
-            """.trimMargin(),
-        )
+        sendMessageLogging(chatId, tagAfkPlayers(members))
     }
 }

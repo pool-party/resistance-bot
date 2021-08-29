@@ -13,17 +13,23 @@ val REGISTRATION_MSG =
 
 const val REGISTRATION_BUTTON = """Join the game 🎲"""
 
-val ON_NO_REGISTRATION_START =
+val ON_NO_REGISTRATION =
     """
     *No game registration found 🔎*
 
     Type /game to start the registration
-    Then use /start command to begin a game
     """.trimIndent()
 
 val ON_PRIVATE_CHAT_REGISTRATION =
     """
     Unable to start a game in a private chat 🙅‍♀️
+    """.trimIndent()
+
+val ON_ONGOING_GAME =
+    """
+    *Game is on 🚨*
+
+    Only single active game in chat is allowed
     """.trimIndent()
 
 val ON_ONGOING_REGISTRATION =

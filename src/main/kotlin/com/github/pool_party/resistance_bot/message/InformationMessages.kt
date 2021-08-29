@@ -16,11 +16,15 @@ val INIT_MSG =
 
 const val INIT_MARKUP = """Add a game to your group chat ✉️"""
 
-fun helpMessage(helpMessages: Map<String, String>) =
+fun helpMessage(groups: List<Map<String, String>>) =
     """
     |Available commands:
     |
-    |${helpMessages.asSequence().joinToString("\n|") { "${it.key} - ${it.value}" }}
+    |${
+        groups.joinToString("\n|\n|") { list ->
+            list.asSequence().joinToString("\n|") { "${it.key} - ${it.value}" }
+        }
+    }
     """.trimMargin()
 
 val HELP_GAME =
