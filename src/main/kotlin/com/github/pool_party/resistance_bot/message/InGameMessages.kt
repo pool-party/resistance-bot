@@ -72,7 +72,7 @@ fun teamRejected(membersAgainst: List<Member>) =
 // TODO Consider using different button marks for this vote.
 const val MISSION_VOTE = """Make your choice 🤔"""
 
-//TODO Show all members with the roles (lookup to mafia game).
+// TODO Show all members with the roles (lookup to mafia game).
 fun gameResult(areSpiesWon: Boolean) =
     """
     TODO

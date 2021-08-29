@@ -11,9 +11,9 @@ class HelpCommand(commands: List<Command>) :
     AbstractCommand(
         "help",
         "show this usage guide",
-        helpMessage(commands.groupBy { it.commandType }.values.map { list ->
-            list.associate { it.command to it.description }
-        }),
+        helpMessage(
+            commands.groupBy { it.commandType }.values.map { list -> list.associate { it.command to it.description } }
+        ),
         CommandType.UTILS,
     ) {
 

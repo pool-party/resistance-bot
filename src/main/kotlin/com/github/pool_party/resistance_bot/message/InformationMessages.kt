@@ -21,9 +21,9 @@ fun helpMessage(groups: List<Map<String, String>>) =
     |Available commands:
     |
     |${
-        groups.joinToString("\n|\n|") { list ->
-            list.asSequence().joinToString("\n|") { "${it.key} - ${it.value}" }
-        }
+    groups.joinToString("\n|\n|") { list ->
+        list.asSequence().joinToString("\n|") { "${it.key} - ${it.value}" }
+    }
     }
     """.trimMargin()
 
