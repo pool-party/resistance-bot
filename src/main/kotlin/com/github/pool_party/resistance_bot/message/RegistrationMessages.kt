@@ -13,6 +13,7 @@ val REGISTRATION_MSG =
 
 const val REGISTRATION_BUTTON = """Join the game 🎲"""
 
+// TODO split on more concrete messages.
 val ON_NO_REGISTRATION =
     """
     *No game registration found 🔎*

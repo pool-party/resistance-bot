@@ -2,6 +2,7 @@ package com.github.pool_party.resistance_bot.message
 
 import com.github.pool_party.resistance_bot.state.GameState
 import com.github.pool_party.resistance_bot.state.Member
+import com.github.pool_party.resistance_bot.state.RoundResult
 import com.github.pool_party.resistance_bot.utils.makeUserLink
 
 // TODO add short description according to rules.
@@ -32,14 +33,14 @@ fun roundSummary(state: GameState, leader: Member) =
     next leader: ${makeUserLink(leader.name, leader.id)}
     """.trimIndent()
 
-fun history(state: GameState) =
+fun history(state: MutableList<RoundResult>) =
     """
     |*Previously in the game 📜*:
     |
-    |${state.history.withIndex().joinToString("\n|") { "${it.index + 1}. ${it.value}"}}
+    |${state.withIndex().joinToString("\n|") { "${it.index + 1}. ${it.value}"}}
     """.trimMargin()
 
-fun leaderChooseMessage(size: Int) = """*Choose the best team of $size members for the upcoming mission\! 👊*"""
+fun leaderChooseMessage(size: Int) = """*Choose the best team of $size members for the upcoming mission! 👊*"""
 
 // TODO Singular form.
 fun tagAfkPlayers(members: List<Member>) =

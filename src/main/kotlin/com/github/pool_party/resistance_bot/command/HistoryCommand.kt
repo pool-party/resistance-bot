@@ -10,7 +10,7 @@ import com.github.pool_party.resistance_bot.utils.chatId
 import com.github.pool_party.resistance_bot.utils.sendMessageLogging
 
 class HistoryCommand(private val stateStorage: StateStorage) :
-    AbstractCommand("history", "shows round history", HELP_HISTORY, CommandType.GAME) {
+    AbstractCommand("history", "show round history", HELP_HISTORY, CommandType.GAME) {
 
     override suspend fun Bot.action(message: Message, args: List<String>) {
         val chatId = message.chatId
@@ -21,6 +21,7 @@ class HistoryCommand(private val stateStorage: StateStorage) :
             return
         }
 
-        sendMessageLogging(chatId, history(state))
+        // TODO handle empty call.
+        sendMessageLogging(chatId, history(state.history))
     }
 }

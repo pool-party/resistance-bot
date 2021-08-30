@@ -10,7 +10,7 @@ import com.github.pool_party.resistance_bot.utils.chatId
 import com.github.pool_party.resistance_bot.utils.sendMessageLogging
 
 class TagCommand(private val stateStorage: StateStorage) :
-    AbstractCommand("tag", "notifies players delaying a game", HELP_TAG, CommandType.GAME) {
+    AbstractCommand("tag", "notify players delaying a game", HELP_TAG, CommandType.GAME) {
 
     override suspend fun Bot.action(message: Message, args: List<String>) {
         val chatId = message.chatId

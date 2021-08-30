@@ -53,21 +53,21 @@ val HELP_STOP =
 
 val HELP_TAG =
     """
-    /tag - notifies players delaying a game
+    /tag - notify players delaying a game
 
     Mentions players who still haven't made necessary actions to continue a game
     """.trimIndent()
 
 val HELP_HISTORY =
     """
-    /history - shows round history
+    /history - show round history
 
     Contains the information about mission's order, results and teams
     """.trimIndent()
 
 val HELP_EXTEND =
     """
-    /extend - add extra 30 seconds for registration
+    /extend - add extra 30s for registration
     """.trimIndent()
 
 // TODO PullPartyBot message, might change
