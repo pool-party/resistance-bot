@@ -5,6 +5,8 @@ import java.util.concurrent.ConcurrentHashMap
 
 interface StateStorage {
 
+    fun getState(chatId: Long): State?
+
     fun getRegistrationState(chatId: Long): RegistrationState?
 
     fun getGameState(chatId: Long): GameState?
@@ -27,11 +29,14 @@ class InMemoryStateStorage : StateStorage {
 
     private val states = ConcurrentHashMap<Long, State>()
 
-    fun get(chatId: Long) = states[chatId]
+    @Suppress("UNCHECKED_CAST")
+    private fun <T : State> get(chatId: Long): T? = states[chatId] as? T
 
-    override fun getRegistrationState(chatId: Long) = get(chatId) as? RegistrationState
+    override fun getState(chatId: Long): State? = get(chatId)
 
-    override fun getGameState(chatId: Long) = get(chatId) as? GameState
+    override fun getRegistrationState(chatId: Long): RegistrationState? = get(chatId)
+
+    override fun getGameState(chatId: Long): GameState? = get(chatId)
 
     override fun startGame(chatId: Long) {
         val state = checkNotNull(getRegistrationState(chatId))
@@ -41,7 +46,7 @@ class InMemoryStateStorage : StateStorage {
     override fun newRegistrationState(
         chatId: Long,
         registrationMessageId: CompletableFuture<Int>,
-        chatName: String?
+        chatName: String?,
     ): Boolean =
         states.putIfAbsent(chatId, RegistrationState(chatName, registrationMessageId)) == null
 
