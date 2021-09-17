@@ -4,6 +4,7 @@ import com.elbekD.bot.Bot
 import com.elbekD.bot.types.Message
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.startGame
+import com.github.pool_party.resistance_bot.message.GET_ADMIN_SUGGEST
 import com.github.pool_party.resistance_bot.message.HELP_GAME
 import com.github.pool_party.resistance_bot.message.ON_ONGOING_REGISTRATION
 import com.github.pool_party.resistance_bot.message.ON_PRIVATE_CHAT_REGISTRATION
@@ -58,10 +59,7 @@ class GameCommand(private val stateStorage: StateStorage, private val longCoder:
         if (canPin(chatId)) {
             pinChatMessage(chatId, registrationMessageId, disableNotification = true).logging()
         } else {
-            sendMessageLogging(
-                chatId,
-                """TODO: hey you, promote me to admin or update my permissions so I can pin the message ☝️""",
-            )
+            sendMessageLogging(chatId, GET_ADMIN_SUGGEST)
         }
 
         // TODO check behaviour.
