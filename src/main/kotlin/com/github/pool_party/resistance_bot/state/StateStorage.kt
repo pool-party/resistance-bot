@@ -29,8 +29,7 @@ class InMemoryStateStorage : StateStorage {
 
     private val states = ConcurrentHashMap<Long, State>()
 
-    @Suppress("UNCHECKED_CAST")
-    private fun <T : State> get(chatId: Long): T? = states[chatId] as? T
+    private inline fun <reified T : State> get(chatId: Long): T? = states[chatId] as? T
 
     override fun getState(chatId: Long): State? = get(chatId)
 
