@@ -21,7 +21,6 @@ class HistoryCommand(private val stateStorage: StateStorage) :
             return
         }
 
-        // TODO handle empty call.
         sendMessageLogging(chatId, history(state.history))
     }
 }

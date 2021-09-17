@@ -33,6 +33,13 @@ val ON_ONGOING_GAME =
     Only single active game in chat is allowed
     """.trimIndent()
 
+val ON_IN_GAME_EXTEND =
+    """
+    *Game is on 🚨*
+
+    Extend command is available only during the registration
+    """.trimIndent()
+
 val ON_ONGOING_REGISTRATION =
     """
     *Registration is already in progress 🚧*
@@ -46,6 +53,12 @@ fun onRegistrationTimestamp(time: Duration) =
 
     Type /extend to add extra 30 seconds
     Type /start to begin a game or /stop to cancel the current registration
+    """.trimIndent()
+
+// TODO Add time handling.
+fun onExtend(time: Duration?) =
+    """
+    *Registration extended 🏃*
     """.trimIndent()
 
 const val ON_LESS_PLAYERS = """*Not enough players to begin a game... 💁🏻‍♂️*"""

@@ -4,8 +4,10 @@ import com.elbekD.bot.Bot
 import com.elbekD.bot.types.Message
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.message.HELP_EXTEND
+import com.github.pool_party.resistance_bot.message.ON_IN_GAME_EXTEND
 import com.github.pool_party.resistance_bot.message.ON_NO_REGISTRATION
 import com.github.pool_party.resistance_bot.message.ON_ONGOING_GAME
+import com.github.pool_party.resistance_bot.message.onExtend
 import com.github.pool_party.resistance_bot.state.GameState
 import com.github.pool_party.resistance_bot.state.RegistrationState
 import com.github.pool_party.resistance_bot.state.StateStorage
@@ -27,7 +29,7 @@ class ExtendCommand(private val stateStorage: StateStorage) :
         when (val state = stateStorage.getState(chatId)) {
             null -> sendMessageLogging(chatId, ON_NO_REGISTRATION)
 
-            is GameState -> sendMessageLogging(chatId, "TODO: the game is already in play")
+            is GameState -> sendMessageLogging(chatId, ON_IN_GAME_EXTEND)
 
             is RegistrationState -> {
                 state.withStarted {
@@ -37,7 +39,7 @@ class ExtendCommand(private val stateStorage: StateStorage) :
                     }
 
                     state.registrationExtendCounter++
-                    sendMessageLogging(chatId, "TODO: successfully extended, TODO: time left")
+                    sendMessageLogging(chatId, onExtend(null))
                     false
                 }
             }

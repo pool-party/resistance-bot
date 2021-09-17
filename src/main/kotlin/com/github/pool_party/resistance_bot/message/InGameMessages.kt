@@ -11,7 +11,7 @@ fun receiveSpyRole(otherSpies: List<String>) =
     TODO:
 
     *Your role - the spy 🦹‍♂️*
-    ${if (otherSpies.isEmpty()) "" else "Your teammates: ${otherSpies.joinToString { "`it`" }}" }
+    ${if (otherSpies.isEmpty()) "" else "Your teammates: ${otherSpies.joinToString { "`it`" }}"}
     """.trimIndent()
 
 // TODO add short description according to rules.
@@ -34,11 +34,17 @@ fun roundSummary(state: GameState, leader: Member) =
     """.trimIndent()
 
 fun history(state: MutableList<RoundResult>) =
-    """
-    |*Previously in the game 📜*:
-    |
-    |${state.withIndex().joinToString("\n|") { "${it.index + 1}. ${it.value}"}}
-    """.trimMargin()
+    if (state.isNotEmpty()) {
+        """
+        |*Previously in the game 📜*:
+        |
+        |${state.withIndex().joinToString("\n|") { "${it.index + 1}. ${it.value}" }}
+        """.trimMargin()
+    } else {
+        """
+        *Nothing to see... yet 👀*
+        """.trimIndent()
+    }
 
 fun leaderChooseMessage(size: Int) = """*Choose the best team of $size members for the upcoming mission! 👊*"""
 
@@ -55,6 +61,7 @@ const val VOTING_SUGGEST = """Head to the bot chat for the voting"""
 // TODO Show the names of included players (in a beautiful way).
 const val TEAM_VOTE = """Do you trust this team a mission? 🤨"""
 
+// TODO Show players against too.
 val TEAM_APPROVED =
     """
     *Suggested team is approved by the most players 👍*

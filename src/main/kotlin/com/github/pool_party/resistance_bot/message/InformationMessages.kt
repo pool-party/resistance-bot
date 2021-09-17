@@ -1,7 +1,6 @@
 package com.github.pool_party.resistance_bot.message
 
 // TODO figure out if admin rights are necessary and provide following messages at all required endpoints.
-//  Create a button for adding bot to the group chat (this message provided only in private chat) (ex. Mafia bot).
 val INIT_MSG =
     """
     Hey! I'm an online version of board game "Resistance"!
