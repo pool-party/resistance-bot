@@ -41,7 +41,8 @@ class StopCommand(private val stateStorage: StateStorage) :
                 var votes = ConcurrentHashMap<Int, Boolean>()
                 if (!state.stopVotes.compareAndSet(null, votes)) return
                 val voteMessage =
-                    sendMessageLogging(chatId, "TODO: stop the game?", markup = makeStopVoteMarkup(chatId, votes)).join()
+                    sendMessageLogging(chatId, "TODO: stop the game?", markup = makeStopVoteMarkup(chatId, votes))
+                        .join()
                         .message_id
 
                 delay(Configuration.STOP_GAME_VOTING)
