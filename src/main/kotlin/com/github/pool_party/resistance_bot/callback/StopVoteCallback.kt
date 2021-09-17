@@ -4,7 +4,6 @@ import com.elbekD.bot.Bot
 import com.elbekD.bot.types.CallbackQuery
 import com.github.pool_party.resistance_bot.command.StopCommand.Companion.processResults
 import com.github.pool_party.resistance_bot.state.StateStorage
-import com.github.pool_party.resistance_bot.utils.deleteMessageLogging
 import com.github.pool_party.resistance_bot.utils.editMessageReplyMarkupLogging
 import com.github.pool_party.resistance_bot.utils.makeStopVoteMarkup
 import kotlinx.serialization.SerialName
