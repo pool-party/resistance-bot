@@ -13,7 +13,7 @@ val REGISTRATION_MSG =
 
 const val REGISTRATION_BUTTON = """Join the game 🎲"""
 
-const val GET_ADMIN_SUGGEST = """_Allow bot to pin the messages for a comfort registration 👑_"""
+const val GET_PIN_RIGHTS_SUGGEST = """_Allow bot to pin the messages for a comfort registration 👑_"""
 
 // TODO split on more concrete messages.
 val ON_NO_REGISTRATION =
