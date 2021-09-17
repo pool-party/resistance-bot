@@ -17,7 +17,7 @@ fun <T> CompletableFuture<T>.logging(prefix: String = ""): CompletableFuture<T> 
     value
 }
 
-private fun String.escapeMarkdown() = replace("[-!.)(]".toRegex()) { "\\${it.groupValues[0]}" }
+private fun String.escapeMarkdown() = replace("[-!.]".toRegex()) { "\\${it.groupValues[0]}" }
 
 fun Bot.sendMessageLogging(
     chatId: Long,

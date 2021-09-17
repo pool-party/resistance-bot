@@ -38,28 +38,32 @@ class StopCommand(private val stateStorage: StateStorage) :
             }
 
             is GameState -> {
-                var votes = ConcurrentHashMap<Int, Boolean>()
+                val votes = ConcurrentHashMap<Int, Boolean>()
                 if (!state.stopVotes.compareAndSet(null, votes)) return
-                val voteMessage =
+                val voteMessageId =
                     sendMessageLogging(chatId, "TODO: stop the game?", markup = makeStopVoteMarkup(chatId, votes))
                         .join()
                         .message_id
 
                 delay(Configuration.STOP_GAME_VOTING)
+                processResults(stateStorage, chatId, voteMessageId)
+            }
+        }
+    }
 
-                votes = state.stopVotes.get() ?: return
-                state.stopVotes.set(null)
+    companion object {
+        suspend fun Bot.processResults(stateStorage: StateStorage, chatId: Long, voteMessageId: Int) {
+            val state = stateStorage.getGameState(chatId) ?: return
+            val votes = state.stopVotes.getAndSet(null) ?: return
+            deleteMessageLogging(chatId, voteMessageId)
 
-                deleteMessageLogging(chatId, voteMessage)
+            val (upVotes, downVotes) = votes.values.partition { it }.toList().map { it.size }
 
-                val (upVotes, downVotes) = votes.values.partition { it }.toList().map { it.size }
-
-                if (upVotes > 1 && upVotes > downVotes) {
-                    sendMessageLogging(chatId, ON_REGISTRATION_STOP)
-                    stateStorage.gameOver(chatId)
-                } else {
-                    sendMessageLogging(chatId, "Failed to stop the game")
-                }
+            if (upVotes >= 1 && upVotes > downVotes) {
+                sendMessageLogging(chatId, ON_REGISTRATION_STOP)
+                stateStorage.gameOver(chatId)
+            } else {
+                sendMessageLogging(chatId, "Failed to stop the game")
             }
         }
     }

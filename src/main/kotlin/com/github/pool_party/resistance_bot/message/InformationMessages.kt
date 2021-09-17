@@ -35,7 +35,7 @@ val HELP_GAME =
     Cancel the registration with /stop command
     Or prolong the registration by 30 seconds with /extend command
 
-    _Bot pins a registration message if allowed (without notify)_
+    _Bot pins a registration message if allowed \(without notify\)_
 
     Type /help for more information
     """.trimIndent()

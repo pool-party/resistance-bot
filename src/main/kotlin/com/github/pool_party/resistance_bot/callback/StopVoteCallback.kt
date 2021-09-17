@@ -2,12 +2,11 @@ package com.github.pool_party.resistance_bot.callback
 
 import com.elbekD.bot.Bot
 import com.elbekD.bot.types.CallbackQuery
-import com.github.pool_party.resistance_bot.message.ON_REGISTRATION_STOP
+import com.github.pool_party.resistance_bot.command.StopCommand.Companion.processResults
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.utils.deleteMessageLogging
 import com.github.pool_party.resistance_bot.utils.editMessageReplyMarkupLogging
 import com.github.pool_party.resistance_bot.utils.makeStopVoteMarkup
-import com.github.pool_party.resistance_bot.utils.sendMessageLogging
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import mu.KotlinLogging
@@ -36,34 +35,13 @@ class StopVoteCallback(private val stateStorage: StateStorage) : Callback {
         val newVerdict = stopCallbackData.verdict
         val previousVerdict = stopVotes.put(user.id, newVerdict)
 
-        when {
-            stopVotes.size >= state.members.size -> {
-                callbackQuery.message?.let {
-                    deleteMessageLogging(gameChatId, it.message_id)
-                }
-                state.stopVotes.set(null)
-
-                // TODO copy paste?
-                val (upVotes, downVotes) = stopVotes.values.partition { it }.toList().map { it.size }
-
-                if (upVotes > 1 && upVotes > downVotes) {
-                    stateStorage.gameOver(gameChatId)
-                    sendMessageLogging(gameChatId, ON_REGISTRATION_STOP)
-                } else {
-                    sendMessageLogging(gameChatId, "Failed to stop the game")
-                }
-            }
-            previousVerdict != newVerdict -> {
-                callbackQuery.message?.let {
-                    editMessageReplyMarkupLogging(
-                        gameChatId,
-                        it.message_id,
-                        makeStopVoteMarkup(gameChatId, stopVotes),
-                    )
-                }
-            }
-        }
-
         answerCallbackQuery(callbackQuery.id)
+        val messageId = callbackQuery.message?.message_id ?: return
+
+        when {
+            stopVotes.size >= state.members.size -> processResults(stateStorage, gameChatId, messageId)
+            previousVerdict != newVerdict ->
+                editMessageReplyMarkupLogging(gameChatId, messageId, makeStopVoteMarkup(gameChatId, stopVotes))
+        }
     }
 }
