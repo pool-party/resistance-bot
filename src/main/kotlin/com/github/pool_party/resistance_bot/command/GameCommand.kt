@@ -54,7 +54,15 @@ class GameCommand(private val stateStorage: StateStorage, private val longCoder:
 
         val registrationMessageId = registrationMessage.message_id
         registrationMessageIdFuture.complete(registrationMessageId)
-        pinChatMessage(chatId, registrationMessageId, disableNotification = true).logging()
+
+        if (canPin(chatId)) {
+            pinChatMessage(chatId, registrationMessageId, disableNotification = true).logging()
+        } else {
+            sendMessageLogging(
+                chatId,
+                """TODO: hey you, promote me to admin or update my permissions so I can pin the message ☝️""",
+            )
+        }
 
         // TODO check behaviour.
         val state = stateStorage.getRegistrationState(chatId) ?: return
@@ -88,5 +96,10 @@ class GameCommand(private val stateStorage: StateStorage, private val longCoder:
         }
 
         state.tryStartAndDo { startGame(chatId, stateStorage) }
+    }
+
+    private fun Bot.canPin(chatId: Long): Boolean {
+        val myId = getMe().join().id.toLong()
+        return getChatMember(chatId, myId).join().can_pin_messages ?: false
     }
 }
