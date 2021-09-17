@@ -28,7 +28,7 @@ class GameCommand(private val stateStorage: StateStorage, private val longCoder:
     override suspend fun Bot.action(message: Message, args: List<String>) {
         val chatId = message.chatId
 
-        if (message.chat.type != "group" && message.chat.type != "supergroup") {
+        if ("group" !in message.chat.type) {
             sendMessageLogging(chatId, ON_PRIVATE_CHAT_REGISTRATION, addBotMarkup())
             return
         }
@@ -40,10 +40,8 @@ class GameCommand(private val stateStorage: StateStorage, private val longCoder:
             return
         }
 
-        val registrationMessage: Message
-
-        try {
-            registrationMessage = sendMessageLogging(
+        val registrationMessage = try {
+            sendMessageLogging(
                 chatId,
                 REGISTRATION_MSG,
                 makeRegistrationMarkup(longCoder.encode(chatId)),
@@ -62,7 +60,6 @@ class GameCommand(private val stateStorage: StateStorage, private val longCoder:
             sendMessageLogging(chatId, GET_PIN_RIGHTS_SUGGEST)
         }
 
-        // TODO check behaviour.
         val state = stateStorage.getRegistrationState(chatId) ?: return
 
         val extendTime = Configuration.REGISTRATION_EXTEND

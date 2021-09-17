@@ -5,6 +5,7 @@ import com.elbekD.bot.types.CallbackQuery
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.squadVote
 import com.github.pool_party.resistance_bot.state.StateStorage
+import com.github.pool_party.resistance_bot.utils.editMessageReplyMarkupLogging
 import com.github.pool_party.resistance_bot.utils.editMessageTextLogging
 import com.github.pool_party.resistance_bot.utils.goToBotMarkup
 import com.github.pool_party.resistance_bot.utils.logging
@@ -94,8 +95,8 @@ class SquadChoiceCallback(private val stateStorage: StateStorage) : Callback {
             return
         }
 
-        editMessageReplyMarkup(
-            userId,
+        editMessageReplyMarkupLogging(
+            userId.toLong(),
             message.message_id,
             markup = buttons.map {
                 if (it != clicked) return@map it
@@ -105,7 +106,7 @@ class SquadChoiceCallback(private val stateStorage: StateStorage) : Callback {
                     else "${clicked.text}$chosen"
                 return@map it.copy(text = newText)
             }.toMarkUp()
-        ).logging()
+        )
 
         answerCallbackQuery(callbackQueryId)
     }
