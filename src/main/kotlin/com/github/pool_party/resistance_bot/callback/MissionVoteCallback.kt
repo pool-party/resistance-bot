@@ -6,6 +6,7 @@ import com.github.pool_party.resistance_bot.state.GameState
 import com.github.pool_party.resistance_bot.state.RoundResult
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.state.Vote
+import com.github.pool_party.resistance_bot.utils.logging
 import com.github.pool_party.resistance_bot.utils.sendMessageLogging
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -29,7 +30,7 @@ class MissionVoteCallback(stateStorage: StateStorage) : AbstractVoteCallback(sta
         val result = votes.asSequence().map { it.second }.all { it }
 
         if (result) {
-            // TODO success.jpg
+            sendPhoto(chatId, Configuration.Pictures.SUCCESS).logging()
             sendMessageLogging(chatId, "TODO: mission has completed successfully").join()
 
             if (++state.resistancePoints >= Configuration.WIN_NUMBER) {
@@ -38,7 +39,7 @@ class MissionVoteCallback(stateStorage: StateStorage) : AbstractVoteCallback(sta
                 return
             }
         } else {
-            // TODO fail.jpg
+            sendPhoto(chatId, Configuration.Pictures.FAIL).logging()
             sendMessageLogging(chatId, "TODO: mission has failed").join()
 
             if (++state.spyPoints >= Configuration.WIN_NUMBER) {
