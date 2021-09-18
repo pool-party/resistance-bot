@@ -29,6 +29,7 @@ class MissionVoteCallback(stateStorage: StateStorage) : AbstractVoteCallback(sta
         val result = votes.asSequence().map { it.second }.all { it }
 
         if (result) {
+            // TODO success.jpg
             sendMessageLogging(chatId, "TODO: mission has completed successfully").join()
 
             if (++state.resistancePoints >= Configuration.WIN_NUMBER) {
@@ -37,6 +38,7 @@ class MissionVoteCallback(stateStorage: StateStorage) : AbstractVoteCallback(sta
                 return
             }
         } else {
+            // TODO fail.jpg
             sendMessageLogging(chatId, "TODO: mission has failed").join()
 
             if (++state.spyPoints >= Configuration.WIN_NUMBER) {
