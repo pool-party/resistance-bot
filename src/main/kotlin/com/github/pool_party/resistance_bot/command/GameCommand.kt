@@ -4,6 +4,7 @@ import com.elbekD.bot.Bot
 import com.elbekD.bot.types.Message
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.startGame
+import com.github.pool_party.resistance_bot.message.GET_PIN_RIGHTS_SUGGEST
 import com.github.pool_party.resistance_bot.message.HELP_GAME
 import com.github.pool_party.resistance_bot.message.ON_ONGOING_REGISTRATION
 import com.github.pool_party.resistance_bot.message.ON_PRIVATE_CHAT_REGISTRATION
@@ -27,7 +28,7 @@ class GameCommand(private val stateStorage: StateStorage, private val longCoder:
     override suspend fun Bot.action(message: Message, args: List<String>) {
         val chatId = message.chatId
 
-        if (message.chat.type != "group" && message.chat.type != "supergroup") {
+        if ("group" !in message.chat.type) {
             sendMessageLogging(chatId, ON_PRIVATE_CHAT_REGISTRATION, addBotMarkup())
             return
         }
@@ -39,10 +40,8 @@ class GameCommand(private val stateStorage: StateStorage, private val longCoder:
             return
         }
 
-        val registrationMessage: Message
-
-        try {
-            registrationMessage = sendMessageLogging(
+        val registrationMessage = try {
+            sendMessageLogging(
                 chatId,
                 REGISTRATION_MSG,
                 makeRegistrationMarkup(longCoder.encode(chatId)),
@@ -54,9 +53,13 @@ class GameCommand(private val stateStorage: StateStorage, private val longCoder:
 
         val registrationMessageId = registrationMessage.message_id
         registrationMessageIdFuture.complete(registrationMessageId)
-        pinChatMessage(chatId, registrationMessageId, disableNotification = true).logging()
 
-        // TODO check behaviour.
+        if (canPin(chatId)) {
+            pinChatMessage(chatId, registrationMessageId, disableNotification = true).logging()
+        } else {
+            sendMessageLogging(chatId, GET_PIN_RIGHTS_SUGGEST)
+        }
+
         val state = stateStorage.getRegistrationState(chatId) ?: return
 
         val extendTime = Configuration.REGISTRATION_EXTEND
@@ -88,5 +91,10 @@ class GameCommand(private val stateStorage: StateStorage, private val longCoder:
         }
 
         state.tryStartAndDo { startGame(chatId, stateStorage) }
+    }
+
+    private fun Bot.canPin(chatId: Long): Boolean {
+        val myId = getMe().join().id.toLong()
+        return getChatMember(chatId, myId).join().can_pin_messages ?: false
     }
 }

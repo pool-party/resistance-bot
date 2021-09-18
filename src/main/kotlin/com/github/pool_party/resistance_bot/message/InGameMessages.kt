@@ -56,6 +56,17 @@ fun tagAfkPlayers(members: List<Member>) =
     |${members.joinToString("|\n") { "- ${makeUserLink(it.name, it.id)}" }}
     """.trimMargin()
 
+const val ON_NON_PLAYER_STOP = """_Only active players can stop the game 🚫_"""
+
+const val ON_ONGOING_STOP_VOTE = """Vote to stop a game is already going. Make your choice above 👆"""
+
+fun stopTheGameVote(senderName: String?) =
+    """${if (senderName != null) "$senderName" else "One of the players"} wants to stop the game 😲"""
+
+const val ON_GAME_STOP = """Game is stopped... 😵"""
+
+const val ON_STOP_VOTE_FAIL = """Not enough votes. The game continues 🥳"""
+
 const val VOTING_SUGGEST = """Head to the bot chat for the voting"""
 
 // TODO Show the names of included players (in a beautiful way).

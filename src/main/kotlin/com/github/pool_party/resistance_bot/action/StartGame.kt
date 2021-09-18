@@ -6,13 +6,13 @@ import com.github.pool_party.resistance_bot.message.ON_GAME_START
 import com.github.pool_party.resistance_bot.message.ON_LESS_PLAYERS
 import com.github.pool_party.resistance_bot.message.ON_MORE_PLAYERS
 import com.github.pool_party.resistance_bot.state.StateStorage
-import com.github.pool_party.resistance_bot.utils.logging
+import com.github.pool_party.resistance_bot.utils.deleteMessageLogging
 import com.github.pool_party.resistance_bot.utils.sendMessageLogging
 
 suspend fun Bot.startGame(chatId: Long, stateStorage: StateStorage) {
     val state = stateStorage.getRegistrationState(chatId) ?: return
 
-    deleteMessage(chatId, state.registrationMessageId).logging()
+    deleteMessageLogging(chatId, state.registrationMessageId)
 
     val playersAmount = state.members.size
 

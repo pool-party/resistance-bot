@@ -4,6 +4,7 @@ import com.github.pool_party.resistance_bot.Configuration
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicReference
 
 /**
  * Pair of user id and their verdict.
@@ -52,6 +53,8 @@ class GameState(registeredMembers: List<Member>) : State() {
     var squad: List<Member>? = null
 
     val votes: MutableMap<Long, Vote> = ConcurrentHashMap()
+
+    val stopVotes: AtomicReference<ConcurrentHashMap<Int, Boolean>?> = AtomicReference(null)
 
     val history = mutableListOf<RoundResult>()
 

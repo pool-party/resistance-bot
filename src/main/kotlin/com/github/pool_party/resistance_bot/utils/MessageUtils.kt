@@ -30,6 +30,11 @@ fun Bot.sendMessageLogging(
         .logging("Failed to send message \"$text\"")
 }
 
+fun Bot.deleteMessageLogging(chatId: Long, messageId: Int): CompletableFuture<out Boolean> {
+    logger.debug { "Deleting message $chatId/$messageId" }
+    return deleteMessage(chatId, messageId).logging("Failed to delete message $chatId/$messageId")
+}
+
 fun Bot.editMessageTextLogging(
     chatId: Long,
     messageId: Int,
@@ -39,4 +44,14 @@ fun Bot.editMessageTextLogging(
     logger.debug { "Editing '$text'" }
     return editMessageText(chatId, messageId, text = text.escapeMarkdown(), parseMode = "MarkdownV2", markup = markup)
         .logging("Failed to send message \"$text\"")
+}
+
+fun Bot.editMessageReplyMarkupLogging(
+    chatId: Long,
+    messageId: Int,
+    markup: InlineKeyboardMarkup? = null
+): CompletableFuture<out Message> {
+    logger.debug { "Editing reply markup: '$markup'" }
+    return editMessageReplyMarkup(chatId, messageId, markup = markup)
+        .logging("Failed to edit reply markup \"$markup\"")
 }

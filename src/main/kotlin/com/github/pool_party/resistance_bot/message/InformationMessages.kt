@@ -1,6 +1,5 @@
 package com.github.pool_party.resistance_bot.message
 
-// TODO figure out if admin rights are necessary and provide following messages at all required endpoints.
 val INIT_MSG =
     """
     Hey! I'm an online version of board game "Resistance"!
@@ -8,7 +7,7 @@ val INIT_MSG =
     You may start by going through the list of /rules
     Or add bot to your group chat and jump right in with /game command
 
-    Bot requires admin rights to organize the game in your group chat
+    _Allow bot to pin the messages for a comfort registration_
 
     Type /help for more information
     """.trimIndent()
@@ -31,9 +30,12 @@ val HELP_GAME =
     /game - start the registration
 
     Registration lasts 3 minutes by default, with notifies during the last minute
+
     You can begin the game whenever you ready with /start command,
     Cancel the registration with /stop command
     Or prolong the registration by 30 seconds with /extend command
+
+    _Bot pins a registration message if allowed \(without notify\)_
 
     Type /help for more information
     """.trimIndent()
@@ -47,7 +49,10 @@ val HELP_START =
 
 val HELP_STOP =
     """
-    /stop - cancel the current registration
+    /stop - stop a game or registration
+
+    You need to collect at least half of active players' votes _for_ to stop a game
+    If a player didn't vote during the 30s period - he is treated as afk, therefore their vote is _for_ the stop
     """.trimIndent()
 
 val HELP_TAG =

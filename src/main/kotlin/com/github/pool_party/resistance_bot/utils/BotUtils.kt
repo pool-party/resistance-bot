@@ -5,6 +5,7 @@ import com.elbekD.bot.types.InlineKeyboardMarkup
 import com.elbekD.bot.types.Message
 import com.elbekD.bot.types.User
 import com.github.pool_party.resistance_bot.Configuration
+import com.github.pool_party.resistance_bot.callback.StopCallbackData
 import com.github.pool_party.resistance_bot.message.INIT_MARKUP
 import com.github.pool_party.resistance_bot.message.REGISTRATION_BUTTON
 import com.github.pool_party.resistance_bot.message.VOTING_SUGGEST
@@ -30,3 +31,17 @@ fun botLink(hash: String? = null) =
     "https://t.me/${Configuration.USERNAME}${if (hash == null) "" else "?start=$hash"}"
 
 fun makeUserLink(name: String, id: Long) = "[$name](tg://user?id=$id)"
+
+fun makeStopVoteMarkup(chatId: Long, votes: Map<Int, Boolean>): InlineKeyboardMarkup {
+
+    fun makeButton(text: String, verdict: Boolean) =
+        InlineKeyboardButton(
+            "$text ${votes.values.count { it == verdict }}",
+            callback_data = StopCallbackData(chatId, verdict).encoded,
+        )
+
+    return listOf(
+        makeButton("""Stop 😨""", true),
+        makeButton(""" Continue 😎""", false),
+    ).toMarkUp()
+}

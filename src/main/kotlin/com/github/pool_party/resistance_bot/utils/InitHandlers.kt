@@ -6,6 +6,7 @@ import com.github.pool_party.resistance_bot.callback.CallbackDispatcher
 import com.github.pool_party.resistance_bot.callback.MissionVoteCallback
 import com.github.pool_party.resistance_bot.callback.SquadChoiceCallback
 import com.github.pool_party.resistance_bot.callback.SquadVoteCallback
+import com.github.pool_party.resistance_bot.callback.StopVoteCallback
 import com.github.pool_party.resistance_bot.command.Command
 import com.github.pool_party.resistance_bot.command.ExtendCommand
 import com.github.pool_party.resistance_bot.command.GameCommand
@@ -28,6 +29,7 @@ fun Bot.initHandlers() {
         SquadChoiceCallback(stateStorage),
         MissionVoteCallback(stateStorage),
         SquadVoteCallback(stateStorage),
+        StopVoteCallback(stateStorage),
     )
 
     val interactions: MutableList<Interaction> = mutableListOf(

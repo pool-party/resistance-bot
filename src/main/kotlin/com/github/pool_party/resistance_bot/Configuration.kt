@@ -23,6 +23,8 @@ object Configuration {
 
     val REGISTRATION_EXTEND by seconds()
 
+    val STOP_GAME_VOTING by seconds()
+
     val REJECTIONS_NUMBER by int()
 
     const val SPY_MARK = """👹"""
