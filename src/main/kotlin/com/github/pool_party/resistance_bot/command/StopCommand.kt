@@ -4,14 +4,20 @@ import com.elbekD.bot.Bot
 import com.elbekD.bot.types.Message
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.message.HELP_STOP
+import com.github.pool_party.resistance_bot.message.ON_GAME_STOP
+import com.github.pool_party.resistance_bot.message.ON_NON_PLAYER_STOP
 import com.github.pool_party.resistance_bot.message.ON_NO_REGISTRATION
+import com.github.pool_party.resistance_bot.message.ON_ONGOING_STOP_VOTE
 import com.github.pool_party.resistance_bot.message.ON_REGISTRATION_STOP
+import com.github.pool_party.resistance_bot.message.ON_STOP_VOTE_FAIL
+import com.github.pool_party.resistance_bot.message.stopTheGameVote
 import com.github.pool_party.resistance_bot.state.GameState
 import com.github.pool_party.resistance_bot.state.RegistrationState
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.utils.chatId
 import com.github.pool_party.resistance_bot.utils.deleteMessageLogging
 import com.github.pool_party.resistance_bot.utils.makeStopVoteMarkup
+import com.github.pool_party.resistance_bot.utils.name
 import com.github.pool_party.resistance_bot.utils.sendMessageLogging
 import kotlinx.coroutines.delay
 import java.util.concurrent.ConcurrentHashMap
@@ -19,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap
 class StopCommand(private val stateStorage: StateStorage) :
     AbstractCommand(
         "stop",
-        "cancel the current registration",
+        "stop a game or registration",
         HELP_STOP,
         CommandType.REGISTRATION,
     ) {
@@ -38,10 +44,22 @@ class StopCommand(private val stateStorage: StateStorage) :
             }
 
             is GameState -> {
+                val messageId = message.message_id
                 val votes = ConcurrentHashMap<Int, Boolean>()
-                if (!state.stopVotes.compareAndSet(null, votes)) return
+
+                if (state.members.none { it.id == message.from?.id?.toLong() }) {
+                    sendMessageLogging(chatId, ON_NON_PLAYER_STOP, replyTo = messageId)
+                    return
+                }
+                if (!state.stopVotes.compareAndSet(null, votes)) {
+                    sendMessageLogging(chatId, ON_ONGOING_STOP_VOTE, replyTo = messageId)
+                    return
+                }
+
                 val voteMessageId =
-                    sendMessageLogging(chatId, "TODO: stop the game?", markup = makeStopVoteMarkup(chatId, votes))
+                    sendMessageLogging(chatId,
+                        stopTheGameVote(message.from?.name),
+                        markup = makeStopVoteMarkup(chatId, votes))
                         .join()
                         .message_id
 
@@ -60,10 +78,10 @@ class StopCommand(private val stateStorage: StateStorage) :
             val (upVotes, downVotes) = votes.values.partition { it }.toList().map { it.size }
 
             if (upVotes >= 1 && upVotes > downVotes) {
-                sendMessageLogging(chatId, ON_REGISTRATION_STOP)
+                sendMessageLogging(chatId, ON_GAME_STOP)
                 stateStorage.gameOver(chatId)
             } else {
-                sendMessageLogging(chatId, "Failed to stop the game")
+                sendMessageLogging(chatId, ON_STOP_VOTE_FAIL)
             }
         }
     }

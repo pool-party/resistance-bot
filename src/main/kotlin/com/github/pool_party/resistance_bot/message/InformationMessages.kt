@@ -49,7 +49,10 @@ val HELP_START =
 
 val HELP_STOP =
     """
-    /stop - cancel the current registration
+    /stop - stop a game or registration
+
+    You need to collect at least half of active players' votes _for_ to stop a game
+    If a player didn't vote during the 30s period - he is treated as afk, therefore their vote is _for_ the stop
     """.trimIndent()
 
 val HELP_TAG =

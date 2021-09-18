@@ -36,12 +36,12 @@ fun makeStopVoteMarkup(chatId: Long, votes: Map<Int, Boolean>): InlineKeyboardMa
 
     fun makeButton(text: String, verdict: Boolean) =
         InlineKeyboardButton(
-            "${votes.values.count { it == verdict }} $text",
+            "$text ${votes.values.count { it == verdict }}",
             callback_data = StopCallbackData(chatId, verdict).encoded,
         )
 
     return listOf(
-        makeButton(Configuration.APPROVE_MARK, true),
-        makeButton(Configuration.REJECT_MARK, false),
+        makeButton("""Stop 😨""", true),
+        makeButton(""" Continue 😎""", false),
     ).toMarkUp()
 }
