@@ -57,11 +57,11 @@ class StopCommand(private val stateStorage: StateStorage) :
                 }
 
                 val voteMessageId =
-                    sendMessageLogging(chatId,
+                    sendMessageLogging(
+                        chatId,
                         stopTheGameVote(message.from?.name),
-                        markup = makeStopVoteMarkup(chatId, votes))
-                        .join()
-                        .message_id
+                        markup = makeStopVoteMarkup(chatId, votes)
+                    ).join().message_id
 
                 delay(Configuration.STOP_GAME_VOTING)
                 processResults(stateStorage, chatId, voteMessageId)
