@@ -5,6 +5,7 @@ import com.github.pool_party.resistance_bot.utils.ConfigurationUtils.boolean
 import com.github.pool_party.resistance_bot.utils.ConfigurationUtils.int
 import com.github.pool_party.resistance_bot.utils.ConfigurationUtils.seconds
 import com.github.pool_party.resistance_bot.utils.ConfigurationUtils.string
+import java.io.File
 
 object Configuration {
 
@@ -49,6 +50,15 @@ object Configuration {
     val PLAYERS_GAME_MINIMUM = BOARDS.keys.minOrNull()!!
 
     val PLAYERS_GAME_MAXIMUM = BOARDS.keys.maxOrNull()!!
+
+    object Pictures {
+
+        private fun assets(fileName: String) = File("assets/$fileName")
+
+        val FAIL = assets("fail.jpg")
+
+        val SUCCESS = assets("success.jpg")
+    }
 
     init {
         check((PLAYERS_GAME_MINIMUM..PLAYERS_GAME_MAXIMUM).all { it in BOARDS })
