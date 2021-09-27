@@ -2,7 +2,7 @@ package com.github.pool_party.resistance_bot
 
 import com.elbekD.bot.Bot
 import com.elbekD.bot.server
-import com.github.pool_party.resistance_bot.sticker.updatePack
+import com.github.pool_party.resistance_bot.sticker.updateSet
 import com.github.pool_party.resistance_bot.utils.initHandlers
 
 fun main() {
@@ -23,6 +23,6 @@ fun main() {
     }
 
     bot.initHandlers()
-    if (Configuration.STICKER_PACK_UPDATE) bot.updatePack()
+    if (Configuration.STICKER_SET_UPDATE) bot.updateSet()
     bot.start()
 }

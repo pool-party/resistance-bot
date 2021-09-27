@@ -14,8 +14,8 @@ object StickerSetConfiguration {
 
     val DEV_USER_ID by long()
 
-    val STICKER_PACK_NAME by string()
+    val STICKER_SET_NAME by string()
 
     val AssetSticker.file
-        get() = File("assets/stickers/$fileName.jpg")
+        get() = File("assets/stickers/$fileName.png")
 }

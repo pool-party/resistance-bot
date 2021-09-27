@@ -2,6 +2,7 @@ package com.github.pool_party.resistance_bot.sticker
 
 import com.elbekD.bot.Bot
 import com.elbekD.bot.types.Message
+import com.github.pool_party.resistance_bot.utils.resolveName
 import java.util.concurrent.CompletableFuture
 
 data class AssetSticker(val fileName: String, val emojis: String) {
@@ -10,7 +11,9 @@ data class AssetSticker(val fileName: String, val emojis: String) {
 
     fun Bot.send(chatId: Long): CompletableFuture<out Message>? {
         if (fileId == null) {
-            val stickerSet = getStickerSet(StickerSetConfiguration.STICKER_PACK_NAME)
+            val setName = resolveName(StickerSetConfiguration.STICKER_SET_NAME)
+
+            val stickerSet = getStickerSet(setName)
                 .handle { value, _ -> value }
                 .join()
                 ?: return null

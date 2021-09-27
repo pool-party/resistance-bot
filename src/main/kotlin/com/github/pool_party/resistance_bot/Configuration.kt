@@ -51,7 +51,7 @@ object Configuration {
 
     val PLAYERS_GAME_MAXIMUM = BOARDS.keys.maxOrNull()!!
 
-    val STICKER_PACK_UPDATE by boolean()
+    val STICKER_SET_UPDATE by boolean()
 
     object Stickers {
 

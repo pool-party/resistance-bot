@@ -1,5 +1,6 @@
 package com.github.pool_party.resistance_bot.utils
 
+import com.elbekD.bot.Bot
 import com.elbekD.bot.types.InlineKeyboardButton
 import com.elbekD.bot.types.InlineKeyboardMarkup
 import com.elbekD.bot.types.Message
@@ -45,3 +46,5 @@ fun makeStopVoteMarkup(chatId: Long, votes: Map<Int, Boolean>): InlineKeyboardMa
         makeButton(""" Continue 😎""", false),
     ).toMarkUp()
 }
+
+fun Bot.resolveName(stickerSetName: String) = "${stickerSetName}_by_${getMe().join().username!!}"
