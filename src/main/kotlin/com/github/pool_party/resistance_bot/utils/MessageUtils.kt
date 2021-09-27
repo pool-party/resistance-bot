@@ -4,6 +4,7 @@ import com.elbekD.bot.Bot
 import com.elbekD.bot.types.InlineKeyboardMarkup
 import com.elbekD.bot.types.Message
 import com.elbekD.bot.types.ReplyKeyboard
+import com.github.pool_party.resistance_bot.sticker.AssetSticker
 import mu.KotlinLogging
 import java.util.concurrent.CompletableFuture
 
@@ -55,3 +56,5 @@ fun Bot.editMessageReplyMarkupLogging(
     return editMessageReplyMarkup(chatId, messageId, markup = markup)
         .logging("Failed to edit reply markup \"$markup\"")
 }
+
+fun Bot.sendStickerLogging(chatId: Long, sticker: AssetSticker) = with (sticker) { send(chatId)?.logging() }

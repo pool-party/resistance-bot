@@ -5,7 +5,7 @@ import com.github.pool_party.resistance_bot.utils.ConfigurationUtils.boolean
 import com.github.pool_party.resistance_bot.utils.ConfigurationUtils.int
 import com.github.pool_party.resistance_bot.utils.ConfigurationUtils.seconds
 import com.github.pool_party.resistance_bot.utils.ConfigurationUtils.string
-import java.io.File
+import com.github.pool_party.resistance_bot.sticker.AssetSticker
 
 object Configuration {
 
@@ -51,13 +51,13 @@ object Configuration {
 
     val PLAYERS_GAME_MAXIMUM = BOARDS.keys.maxOrNull()!!
 
-    object Pictures {
+    val STICKER_PACK_UPDATE by boolean()
 
-        private fun assets(fileName: String) = File("assets/$fileName")
+    object Stickers {
 
-        val FAIL = assets("fail.jpg")
+        val FAIL = AssetSticker("fail", """❌""")
 
-        val SUCCESS = assets("success.jpg")
+        val SUCCESS = AssetSticker("success", """✔️""")
     }
 
     init {

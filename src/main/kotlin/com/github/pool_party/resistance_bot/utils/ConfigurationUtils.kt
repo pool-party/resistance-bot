@@ -6,6 +6,7 @@ import com.natpryce.konfig.Key
 import com.natpryce.konfig.PropertyLocation
 import com.natpryce.konfig.booleanType
 import com.natpryce.konfig.intType
+import com.natpryce.konfig.longType
 import com.natpryce.konfig.overriding
 import com.natpryce.konfig.stringType
 import kotlin.reflect.KProperty
@@ -25,6 +26,8 @@ object ConfigurationUtils {
     fun <K> boolean() = Configured<Boolean, K>(booleanType)
 
     fun <K> int() = Configured<Int, K>(intType)
+
+    fun <K> long() = Configured<Long, K>(longType)
 
     fun <K> string() = Configured<String, K>(stringType)
 
