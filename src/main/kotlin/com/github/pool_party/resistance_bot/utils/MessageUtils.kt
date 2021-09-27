@@ -57,4 +57,4 @@ fun Bot.editMessageReplyMarkupLogging(
         .logging("Failed to edit reply markup \"$markup\"")
 }
 
-fun Bot.sendStickerLogging(chatId: Long, sticker: AssetSticker) = with (sticker) { send(chatId)?.logging() }
+fun Bot.sendStickerLogging(chatId: Long, sticker: AssetSticker) = with(sticker) { send(chatId)?.logging() }
