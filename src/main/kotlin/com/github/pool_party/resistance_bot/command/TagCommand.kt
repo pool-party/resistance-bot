@@ -6,11 +6,12 @@ import com.github.pool_party.resistance_bot.message.HELP_TAG
 import com.github.pool_party.resistance_bot.message.ON_NO_REGISTRATION
 import com.github.pool_party.resistance_bot.message.tagAfkPlayers
 import com.github.pool_party.resistance_bot.state.StateStorage
-import com.github.pool_party.resistance_bot.utils.chatId
-import com.github.pool_party.resistance_bot.utils.sendMessageLogging
+import com.github.pool_party.telegram_bot_utils.interaction.command.AbstractCommand
+import com.github.pool_party.telegram_bot_utils.utils.chatId
+import com.github.pool_party.telegram_bot_utils.utils.sendMessageLogging
 
 class TagCommand(private val stateStorage: StateStorage) :
-    AbstractCommand("tag", "notify players delaying a game", HELP_TAG, CommandType.GAME) {
+    AbstractCommand("tag", "notify players delaying a game", HELP_TAG) {
 
     override suspend fun Bot.action(message: Message, args: List<String>) {
         val chatId = message.chatId

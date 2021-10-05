@@ -15,18 +15,18 @@ import com.github.pool_party.resistance_bot.state.Coder
 import com.github.pool_party.resistance_bot.state.Member
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.utils.addBotMarkup
-import com.github.pool_party.resistance_bot.utils.chatId
-import com.github.pool_party.resistance_bot.utils.editMessageTextLogging
 import com.github.pool_party.resistance_bot.utils.makeRegistrationMarkup
-import com.github.pool_party.resistance_bot.utils.name
-import com.github.pool_party.resistance_bot.utils.sendMessageLogging
+import com.github.pool_party.telegram_bot_utils.interaction.command.AbstractCommand
+import com.github.pool_party.telegram_bot_utils.utils.chatId
+import com.github.pool_party.telegram_bot_utils.utils.editMessageTextLogging
+import com.github.pool_party.telegram_bot_utils.utils.name
+import com.github.pool_party.telegram_bot_utils.utils.sendMessageLogging
 
 class StartCommand(private val stateStorage: StateStorage, private val longCoder: Coder<Long>) :
     AbstractCommand(
         "start",
         "finish the registration and begin a game",
         HELP_START,
-        CommandType.REGISTRATION,
     ) {
 
     override suspend fun Bot.action(message: Message, args: List<String>) = when {

@@ -11,16 +11,16 @@ import com.github.pool_party.resistance_bot.message.onExtend
 import com.github.pool_party.resistance_bot.state.GameState
 import com.github.pool_party.resistance_bot.state.RegistrationState
 import com.github.pool_party.resistance_bot.state.StateStorage
-import com.github.pool_party.resistance_bot.utils.chatId
 import com.github.pool_party.resistance_bot.utils.inc
-import com.github.pool_party.resistance_bot.utils.sendMessageLogging
+import com.github.pool_party.telegram_bot_utils.interaction.command.AbstractCommand
+import com.github.pool_party.telegram_bot_utils.utils.chatId
+import com.github.pool_party.telegram_bot_utils.utils.sendMessageLogging
 
 class ExtendCommand(private val stateStorage: StateStorage) :
     AbstractCommand(
         "extend",
         "add extra ${Configuration.REGISTRATION_EXTEND.inWholeSeconds}s for registration",
         HELP_EXTEND,
-        CommandType.UTILS,
     ) {
 
     override suspend fun Bot.action(message: Message, args: List<String>) {

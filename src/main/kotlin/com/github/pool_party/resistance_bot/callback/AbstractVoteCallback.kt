@@ -8,15 +8,16 @@ import com.github.pool_party.resistance_bot.state.GameState
 import com.github.pool_party.resistance_bot.state.Member
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.state.Vote
-import com.github.pool_party.resistance_bot.utils.editMessageTextLogging
-import com.github.pool_party.resistance_bot.utils.name
+import com.github.pool_party.telegram_bot_utils.interaction.callback.Callback
+import com.github.pool_party.telegram_bot_utils.utils.editMessageTextLogging
+import com.github.pool_party.telegram_bot_utils.utils.name
 
 interface VoteCallbackData {
     val gameChatId: Long
     val verdict: Boolean
 }
 
-abstract class AbstractVoteCallback(protected val stateStorage: StateStorage) : Callback {
+abstract class AbstractVoteCallback(protected val stateStorage: StateStorage) : Callback<CallbackData> {
 
     abstract suspend fun getMemberNumber(voteCallbackData: VoteCallbackData): Int?
 

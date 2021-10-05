@@ -13,17 +13,18 @@ import com.github.pool_party.resistance_bot.message.onRegistrationTimestamp
 import com.github.pool_party.resistance_bot.state.Coder
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.utils.addBotMarkup
-import com.github.pool_party.resistance_bot.utils.chatId
 import com.github.pool_party.resistance_bot.utils.dec
-import com.github.pool_party.resistance_bot.utils.logging
 import com.github.pool_party.resistance_bot.utils.makeRegistrationMarkup
-import com.github.pool_party.resistance_bot.utils.sendMessageLogging
+import com.github.pool_party.telegram_bot_utils.interaction.command.AbstractCommand
+import com.github.pool_party.telegram_bot_utils.utils.chatId
+import com.github.pool_party.telegram_bot_utils.utils.logging
+import com.github.pool_party.telegram_bot_utils.utils.sendMessageLogging
 import kotlinx.coroutines.delay
 import java.util.concurrent.CompletableFuture
 import kotlin.time.Duration.Companion.minutes
 
 class GameCommand(private val stateStorage: StateStorage, private val longCoder: Coder<Long>) :
-    AbstractCommand("game", "start the registration", HELP_GAME, CommandType.REGISTRATION) {
+    AbstractCommand("game", "start the registration", HELP_GAME) {
 
     override suspend fun Bot.action(message: Message, args: List<String>) {
         val chatId = message.chatId
