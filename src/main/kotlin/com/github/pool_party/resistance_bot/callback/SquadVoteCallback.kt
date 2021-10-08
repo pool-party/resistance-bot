@@ -1,6 +1,7 @@
 package com.github.pool_party.resistance_bot.callback
 
 import com.elbekD.bot.Bot
+import com.github.pool_party.flume.utils.sendMessageLogging
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.missionVote
 import com.github.pool_party.resistance_bot.message.TEAM_APPROVED
@@ -10,7 +11,6 @@ import com.github.pool_party.resistance_bot.state.GameState
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.state.Vote
 import com.github.pool_party.resistance_bot.utils.goToBotMarkup
-import com.github.pool_party.resistance_bot.utils.sendMessageLogging
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

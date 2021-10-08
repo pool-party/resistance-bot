@@ -2,16 +2,17 @@ package com.github.pool_party.resistance_bot.callback
 
 import com.elbekD.bot.Bot
 import com.elbekD.bot.types.CallbackQuery
+import com.github.pool_party.flume.interaction.callback.Callback
+import com.github.pool_party.flume.utils.editMessageReplyMarkupLogging
+import com.github.pool_party.flume.utils.editMessageTextLogging
+import com.github.pool_party.flume.utils.name
+import com.github.pool_party.flume.utils.sendMessageLogging
+import com.github.pool_party.flume.utils.toMarkUp
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.squadVote
 import com.github.pool_party.resistance_bot.state.StateStorage
-import com.github.pool_party.resistance_bot.utils.editMessageReplyMarkupLogging
-import com.github.pool_party.resistance_bot.utils.editMessageTextLogging
 import com.github.pool_party.resistance_bot.utils.goToBotMarkup
 import com.github.pool_party.resistance_bot.utils.makeUserLink
-import com.github.pool_party.resistance_bot.utils.name
-import com.github.pool_party.resistance_bot.utils.sendMessageLogging
-import com.github.pool_party.resistance_bot.utils.toMarkUp
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -23,7 +24,7 @@ data class SquadChoiceCallbackData(override val gameChatId: Long, val personId: 
     }
 }
 
-class SquadChoiceCallback(private val stateStorage: StateStorage) : Callback {
+class SquadChoiceCallback(private val stateStorage: StateStorage) : Callback<CallbackData> {
 
     override val callbackDataKClass = SquadChoiceCallbackData::class
 

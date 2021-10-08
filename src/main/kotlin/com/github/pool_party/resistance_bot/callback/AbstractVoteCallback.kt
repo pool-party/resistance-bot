@@ -2,21 +2,22 @@ package com.github.pool_party.resistance_bot.callback
 
 import com.elbekD.bot.Bot
 import com.elbekD.bot.types.CallbackQuery
+import com.github.pool_party.flume.interaction.callback.Callback
+import com.github.pool_party.flume.utils.editMessageTextLogging
+import com.github.pool_party.flume.utils.name
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.chooseSquad
 import com.github.pool_party.resistance_bot.state.GameState
 import com.github.pool_party.resistance_bot.state.Member
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.state.Vote
-import com.github.pool_party.resistance_bot.utils.editMessageTextLogging
-import com.github.pool_party.resistance_bot.utils.name
 
 interface VoteCallbackData {
     val gameChatId: Long
     val verdict: Boolean
 }
 
-abstract class AbstractVoteCallback(protected val stateStorage: StateStorage) : Callback {
+abstract class AbstractVoteCallback(protected val stateStorage: StateStorage) : Callback<CallbackData> {
 
     abstract suspend fun getMemberNumber(voteCallbackData: VoteCallbackData): Int?
 

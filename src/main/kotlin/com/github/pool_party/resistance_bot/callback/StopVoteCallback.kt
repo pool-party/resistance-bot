@@ -2,9 +2,10 @@ package com.github.pool_party.resistance_bot.callback
 
 import com.elbekD.bot.Bot
 import com.elbekD.bot.types.CallbackQuery
+import com.github.pool_party.flume.interaction.callback.Callback
+import com.github.pool_party.flume.utils.editMessageReplyMarkupLogging
 import com.github.pool_party.resistance_bot.command.StopCommand.Companion.processResults
 import com.github.pool_party.resistance_bot.state.StateStorage
-import com.github.pool_party.resistance_bot.utils.editMessageReplyMarkupLogging
 import com.github.pool_party.resistance_bot.utils.makeStopVoteMarkup
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -14,7 +15,7 @@ import mu.KotlinLogging
 @SerialName("stop")
 data class StopCallbackData(override val gameChatId: Long, val verdict: Boolean) : CallbackData()
 
-class StopVoteCallback(private val stateStorage: StateStorage) : Callback {
+class StopVoteCallback(private val stateStorage: StateStorage) : Callback<CallbackData> {
 
     private val logger = KotlinLogging.logger {}
 

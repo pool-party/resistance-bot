@@ -2,13 +2,13 @@ package com.github.pool_party.resistance_bot.action
 
 import com.elbekD.bot.Bot
 import com.elbekD.bot.types.InlineKeyboardButton
+import com.github.pool_party.flume.utils.sendMessageLogging
+import com.github.pool_party.flume.utils.toMarkUp
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.callback.SquadChoiceCallbackData
 import com.github.pool_party.resistance_bot.message.leaderChooseMessage
 import com.github.pool_party.resistance_bot.message.roundSummary
 import com.github.pool_party.resistance_bot.state.StateStorage
-import com.github.pool_party.resistance_bot.utils.sendMessageLogging
-import com.github.pool_party.resistance_bot.utils.toMarkUp
 
 suspend fun Bot.chooseSquad(chatId: Long, stateStorage: StateStorage) {
 
