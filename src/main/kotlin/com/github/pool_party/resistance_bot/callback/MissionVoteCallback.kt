@@ -1,12 +1,12 @@
 package com.github.pool_party.resistance_bot.callback
 
 import com.elbekD.bot.Bot
+import com.github.pool_party.flume.utils.sendMessageLogging
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.state.GameState
 import com.github.pool_party.resistance_bot.state.RoundResult
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.state.Vote
-import com.github.pool_party.telegram_bot_utils.utils.sendMessageLogging
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

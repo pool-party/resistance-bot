@@ -2,15 +2,15 @@ package com.github.pool_party.resistance_bot.callback
 
 import com.elbekD.bot.Bot
 import com.elbekD.bot.types.CallbackQuery
+import com.github.pool_party.flume.interaction.callback.Callback
+import com.github.pool_party.flume.utils.editMessageTextLogging
+import com.github.pool_party.flume.utils.name
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.chooseSquad
 import com.github.pool_party.resistance_bot.state.GameState
 import com.github.pool_party.resistance_bot.state.Member
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.state.Vote
-import com.github.pool_party.telegram_bot_utils.interaction.callback.Callback
-import com.github.pool_party.telegram_bot_utils.utils.editMessageTextLogging
-import com.github.pool_party.telegram_bot_utils.utils.name
 
 interface VoteCallbackData {
     val gameChatId: Long

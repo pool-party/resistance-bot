@@ -1,7 +1,7 @@
 package com.github.pool_party.resistance_bot
 
+import com.github.pool_party.flume.configuration.AbstractConfiguration
 import com.github.pool_party.resistance_bot.state.Board
-import com.github.pool_party.telegram_bot_utils.configuration.AbstractConfiguration
 
 object Configuration : AbstractConfiguration() {
 

@@ -2,6 +2,10 @@ package com.github.pool_party.resistance_bot.command
 
 import com.elbekD.bot.Bot
 import com.elbekD.bot.types.Message
+import com.github.pool_party.flume.interaction.command.AbstractCommand
+import com.github.pool_party.flume.utils.chatId
+import com.github.pool_party.flume.utils.logging
+import com.github.pool_party.flume.utils.sendMessageLogging
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.startGame
 import com.github.pool_party.resistance_bot.message.GET_PIN_RIGHTS_SUGGEST
@@ -15,10 +19,6 @@ import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.utils.addBotMarkup
 import com.github.pool_party.resistance_bot.utils.dec
 import com.github.pool_party.resistance_bot.utils.makeRegistrationMarkup
-import com.github.pool_party.telegram_bot_utils.interaction.command.AbstractCommand
-import com.github.pool_party.telegram_bot_utils.utils.chatId
-import com.github.pool_party.telegram_bot_utils.utils.logging
-import com.github.pool_party.telegram_bot_utils.utils.sendMessageLogging
 import kotlinx.coroutines.delay
 import java.util.concurrent.CompletableFuture
 import kotlin.time.Duration.Companion.minutes

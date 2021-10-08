@@ -2,17 +2,17 @@ package com.github.pool_party.resistance_bot.callback
 
 import com.elbekD.bot.Bot
 import com.elbekD.bot.types.CallbackQuery
+import com.github.pool_party.flume.interaction.callback.Callback
+import com.github.pool_party.flume.utils.editMessageReplyMarkupLogging
+import com.github.pool_party.flume.utils.editMessageTextLogging
+import com.github.pool_party.flume.utils.name
+import com.github.pool_party.flume.utils.sendMessageLogging
+import com.github.pool_party.flume.utils.toMarkUp
 import com.github.pool_party.resistance_bot.Configuration
 import com.github.pool_party.resistance_bot.action.squadVote
 import com.github.pool_party.resistance_bot.state.StateStorage
 import com.github.pool_party.resistance_bot.utils.goToBotMarkup
 import com.github.pool_party.resistance_bot.utils.makeUserLink
-import com.github.pool_party.telegram_bot_utils.interaction.callback.Callback
-import com.github.pool_party.telegram_bot_utils.utils.editMessageReplyMarkupLogging
-import com.github.pool_party.telegram_bot_utils.utils.editMessageTextLogging
-import com.github.pool_party.telegram_bot_utils.utils.name
-import com.github.pool_party.telegram_bot_utils.utils.sendMessageLogging
-import com.github.pool_party.telegram_bot_utils.utils.toMarkUp
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
